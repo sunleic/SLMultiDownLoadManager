@@ -1,0 +1,521 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		718279111D51DA6D009E5C86 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279101D51DA6D009E5C86 /* main.m */; };
+		718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279131D51DA6D009E5C86 /* AppDelegate.m */; };
+		718279171D51DA6D009E5C86 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279161D51DA6D009E5C86 /* ViewController.m */; };
+		7182791A1D51DA6D009E5C86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 718279181D51DA6D009E5C86 /* Main.storyboard */; };
+		7182791C1D51DA6D009E5C86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7182791B1D51DA6D009E5C86 /* Assets.xcassets */; };
+		7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */; };
+		7182792A1D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279291D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m */; };
+		718279351D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		718279261D51DA6D009E5C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 718279041D51DA6D009E5C86 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7182790B1D51DA6D009E5C86;
+			remoteInfo = SLMultiDownLoadManager;
+		};
+		718279311D51DA6D009E5C86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 718279041D51DA6D009E5C86 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7182790B1D51DA6D009E5C86;
+			remoteInfo = SLMultiDownLoadManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7182790C1D51DA6D009E5C86 /* SLMultiDownLoadManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SLMultiDownLoadManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		718279101D51DA6D009E5C86 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		718279121D51DA6D009E5C86 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		718279131D51DA6D009E5C86 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		718279151D51DA6D009E5C86 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		718279161D51DA6D009E5C86 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		718279191D51DA6D009E5C86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7182791B1D51DA6D009E5C86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7182791E1D51DA6D009E5C86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		718279201D51DA6D009E5C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		718279251D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLMultiDownLoadManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		718279291D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLMultiDownLoadManagerTests.m; sourceTree = "<group>"; };
+		7182792B1D51DA6D009E5C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		718279301D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLMultiDownLoadManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLMultiDownLoadManagerUITests.m; sourceTree = "<group>"; };
+		718279361D51DA6D009E5C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		718279091D51DA6D009E5C86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		718279221D51DA6D009E5C86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7182792D1D51DA6D009E5C86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		718279031D51DA6D009E5C86 = {
+			isa = PBXGroup;
+			children = (
+				7182790E1D51DA6D009E5C86 /* SLMultiDownLoadManager */,
+				718279281D51DA6D009E5C86 /* SLMultiDownLoadManagerTests */,
+				718279331D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests */,
+				7182790D1D51DA6D009E5C86 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7182790D1D51DA6D009E5C86 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7182790C1D51DA6D009E5C86 /* SLMultiDownLoadManager.app */,
+				718279251D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.xctest */,
+				718279301D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7182790E1D51DA6D009E5C86 /* SLMultiDownLoadManager */ = {
+			isa = PBXGroup;
+			children = (
+				718279121D51DA6D009E5C86 /* AppDelegate.h */,
+				718279131D51DA6D009E5C86 /* AppDelegate.m */,
+				718279151D51DA6D009E5C86 /* ViewController.h */,
+				718279161D51DA6D009E5C86 /* ViewController.m */,
+				718279181D51DA6D009E5C86 /* Main.storyboard */,
+				7182791B1D51DA6D009E5C86 /* Assets.xcassets */,
+				7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */,
+				718279201D51DA6D009E5C86 /* Info.plist */,
+				7182790F1D51DA6D009E5C86 /* Supporting Files */,
+			);
+			path = SLMultiDownLoadManager;
+			sourceTree = "<group>";
+		};
+		7182790F1D51DA6D009E5C86 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				718279101D51DA6D009E5C86 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		718279281D51DA6D009E5C86 /* SLMultiDownLoadManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				718279291D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m */,
+				7182792B1D51DA6D009E5C86 /* Info.plist */,
+			);
+			path = SLMultiDownLoadManagerTests;
+			sourceTree = "<group>";
+		};
+		718279331D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */,
+				718279361D51DA6D009E5C86 /* Info.plist */,
+			);
+			path = SLMultiDownLoadManagerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7182790B1D51DA6D009E5C86 /* SLMultiDownLoadManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 718279391D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManager" */;
+			buildPhases = (
+				718279081D51DA6D009E5C86 /* Sources */,
+				718279091D51DA6D009E5C86 /* Frameworks */,
+				7182790A1D51DA6D009E5C86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SLMultiDownLoadManager;
+			productName = SLMultiDownLoadManager;
+			productReference = 7182790C1D51DA6D009E5C86 /* SLMultiDownLoadManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+		718279241D51DA6D009E5C86 /* SLMultiDownLoadManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7182793C1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerTests" */;
+			buildPhases = (
+				718279211D51DA6D009E5C86 /* Sources */,
+				718279221D51DA6D009E5C86 /* Frameworks */,
+				718279231D51DA6D009E5C86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				718279271D51DA6D009E5C86 /* PBXTargetDependency */,
+			);
+			name = SLMultiDownLoadManagerTests;
+			productName = SLMultiDownLoadManagerTests;
+			productReference = 718279251D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7182792F1D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7182793F1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerUITests" */;
+			buildPhases = (
+				7182792C1D51DA6D009E5C86 /* Sources */,
+				7182792D1D51DA6D009E5C86 /* Frameworks */,
+				7182792E1D51DA6D009E5C86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				718279321D51DA6D009E5C86 /* PBXTargetDependency */,
+			);
+			name = SLMultiDownLoadManagerUITests;
+			productName = SLMultiDownLoadManagerUITests;
+			productReference = 718279301D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		718279041D51DA6D009E5C86 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = sunlei;
+				TargetAttributes = {
+					7182790B1D51DA6D009E5C86 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					718279241D51DA6D009E5C86 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 7182790B1D51DA6D009E5C86;
+					};
+					7182792F1D51DA6D009E5C86 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 7182790B1D51DA6D009E5C86;
+					};
+				};
+			};
+			buildConfigurationList = 718279071D51DA6D009E5C86 /* Build configuration list for PBXProject "SLMultiDownLoadManager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 718279031D51DA6D009E5C86;
+			productRefGroup = 7182790D1D51DA6D009E5C86 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7182790B1D51DA6D009E5C86 /* SLMultiDownLoadManager */,
+				718279241D51DA6D009E5C86 /* SLMultiDownLoadManagerTests */,
+				7182792F1D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7182790A1D51DA6D009E5C86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */,
+				7182791C1D51DA6D009E5C86 /* Assets.xcassets in Resources */,
+				7182791A1D51DA6D009E5C86 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		718279231D51DA6D009E5C86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7182792E1D51DA6D009E5C86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		718279081D51DA6D009E5C86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				718279171D51DA6D009E5C86 /* ViewController.m in Sources */,
+				718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */,
+				718279111D51DA6D009E5C86 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		718279211D51DA6D009E5C86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7182792A1D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7182792C1D51DA6D009E5C86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				718279351D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		718279271D51DA6D009E5C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7182790B1D51DA6D009E5C86 /* SLMultiDownLoadManager */;
+			targetProxy = 718279261D51DA6D009E5C86 /* PBXContainerItemProxy */;
+		};
+		718279321D51DA6D009E5C86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7182790B1D51DA6D009E5C86 /* SLMultiDownLoadManager */;
+			targetProxy = 718279311D51DA6D009E5C86 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		718279181D51DA6D009E5C86 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				718279191D51DA6D009E5C86 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7182791E1D51DA6D009E5C86 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		718279371D51DA6D009E5C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		718279381D51DA6D009E5C86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7182793A1D51DA6D009E5C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = SLMultiDownLoadManager/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7182793B1D51DA6D009E5C86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = SLMultiDownLoadManager/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		7182793D1D51DA6D009E5C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SLMultiDownLoadManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManagerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SLMultiDownLoadManager.app/SLMultiDownLoadManager";
+			};
+			name = Debug;
+		};
+		7182793E1D51DA6D009E5C86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SLMultiDownLoadManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManagerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SLMultiDownLoadManager.app/SLMultiDownLoadManager";
+			};
+			name = Release;
+		};
+		718279401D51DA6D009E5C86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SLMultiDownLoadManagerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManagerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SLMultiDownLoadManager;
+			};
+			name = Debug;
+		};
+		718279411D51DA6D009E5C86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SLMultiDownLoadManagerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManagerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SLMultiDownLoadManager;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		718279071D51DA6D009E5C86 /* Build configuration list for PBXProject "SLMultiDownLoadManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				718279371D51DA6D009E5C86 /* Debug */,
+				718279381D51DA6D009E5C86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		718279391D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7182793A1D51DA6D009E5C86 /* Debug */,
+				7182793B1D51DA6D009E5C86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7182793C1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7182793D1D51DA6D009E5C86 /* Debug */,
+				7182793E1D51DA6D009E5C86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7182793F1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				718279401D51DA6D009E5C86 /* Debug */,
+				718279411D51DA6D009E5C86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 718279041D51DA6D009E5C86 /* Project object */;
+}
