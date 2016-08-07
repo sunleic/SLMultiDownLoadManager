@@ -1,0 +1,33 @@
+//
+//  SLDownLoadQueue.h
+//  SLMultiDownLoadManager
+//
+//  Created by sunlei on 16/8/3.
+//  Copyright © 2016年 sunlei. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "DownLoadHeader.h"
+#import "SLDownLoadModel.h"
+
+@interface SLDownLoadQueue : NSObject
+
+@property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *downLoadQueueArr;  //装载非下载完成状态的model
+@property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *completedDownLoadQueueArr;  //装载已经下载完成的model
+
+//添加下载任务到下载队列中
+-(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model;
+
+//刷新下载
+-(void)updateDownLoad;
+
+//恢复某一下载任务
+-(void)resumeWithDownLoadModel:(SLDownLoadModel *)model;
+
+//控制某一正在下载 暂停下载
+-(void)pauseWithDownLoadModel:(SLDownLoadModel *)model;
+-(void)pauseAll;
+
++(SLDownLoadQueue *)downLoadQueue;
+
+@end

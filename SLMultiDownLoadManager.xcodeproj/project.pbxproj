@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		683E4BBED4D8D94C6BB13492 /* libPods-SLMultiDownLoadManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFFA7ACF2DF17AF30D7E9E82 /* libPods-SLMultiDownLoadManager.a */; };
 		718279111D51DA6D009E5C86 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279101D51DA6D009E5C86 /* main.m */; };
 		718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279131D51DA6D009E5C86 /* AppDelegate.m */; };
 		718279171D51DA6D009E5C86 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279161D51DA6D009E5C86 /* ViewController.m */; };
@@ -15,6 +16,14 @@
 		7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */; };
 		7182792A1D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279291D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m */; };
 		718279351D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */; };
+		71F432121D5425C900C7574C /* tmp.png in Resources */ = {isa = PBXBuildFile; fileRef = 71F432111D5425C900C7574C /* tmp.png */; };
+		71F44F361D531F7F00BF6DB0 /* SLDownLoadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F2B1D531F7F00BF6DB0 /* SLDownLoadModel.m */; };
+		71F44F371D531F7F00BF6DB0 /* SLDownLoadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F2D1D531F7F00BF6DB0 /* SLDownLoadQueue.m */; };
+		71F44F381D531F7F00BF6DB0 /* SLFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F2F1D531F7F00BF6DB0 /* SLFileManager.m */; };
+		71F44F391D531F7F00BF6DB0 /* SLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F311D531F7F00BF6DB0 /* SLSessionManager.m */; };
+		71F44F3C1D531FAB00BF6DB0 /* DownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F3B1D531FAB00BF6DB0 /* DownloadViewController.m */; };
+		71F44F3F1D531FF400BF6DB0 /* DownLoadingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F3E1D531FF400BF6DB0 /* DownLoadingTableView.m */; };
+		71F44F451D53228D00BF6DB0 /* DownLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F441D53228D00BF6DB0 /* DownLoadingTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		061E4D78E85254152C72C857 /* Pods-SLMultiDownLoadManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLMultiDownLoadManager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SLMultiDownLoadManager/Pods-SLMultiDownLoadManager.debug.xcconfig"; sourceTree = "<group>"; };
 		7182790C1D51DA6D009E5C86 /* SLMultiDownLoadManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SLMultiDownLoadManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		718279101D51DA6D009E5C86 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		718279121D51DA6D009E5C86 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +61,24 @@
 		718279301D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLMultiDownLoadManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLMultiDownLoadManagerUITests.m; sourceTree = "<group>"; };
 		718279361D51DA6D009E5C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71F432111D5425C900C7574C /* tmp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmp.png; sourceTree = "<group>"; };
+		71F44F291D531F7F00BF6DB0 /* DownLoadHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadHeader.h; sourceTree = "<group>"; };
+		71F44F2A1D531F7F00BF6DB0 /* SLDownLoadModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLDownLoadModel.h; sourceTree = "<group>"; };
+		71F44F2B1D531F7F00BF6DB0 /* SLDownLoadModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLDownLoadModel.m; sourceTree = "<group>"; };
+		71F44F2C1D531F7F00BF6DB0 /* SLDownLoadQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLDownLoadQueue.h; sourceTree = "<group>"; };
+		71F44F2D1D531F7F00BF6DB0 /* SLDownLoadQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLDownLoadQueue.m; sourceTree = "<group>"; };
+		71F44F2E1D531F7F00BF6DB0 /* SLFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileManager.h; sourceTree = "<group>"; };
+		71F44F2F1D531F7F00BF6DB0 /* SLFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFileManager.m; sourceTree = "<group>"; };
+		71F44F301D531F7F00BF6DB0 /* SLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLSessionManager.h; sourceTree = "<group>"; };
+		71F44F311D531F7F00BF6DB0 /* SLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLSessionManager.m; sourceTree = "<group>"; };
+		71F44F3A1D531FAB00BF6DB0 /* DownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadViewController.h; sourceTree = "<group>"; };
+		71F44F3B1D531FAB00BF6DB0 /* DownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadViewController.m; sourceTree = "<group>"; };
+		71F44F3D1D531FF400BF6DB0 /* DownLoadingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadingTableView.h; sourceTree = "<group>"; };
+		71F44F3E1D531FF400BF6DB0 /* DownLoadingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadingTableView.m; sourceTree = "<group>"; };
+		71F44F431D53228D00BF6DB0 /* DownLoadingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadingTableViewCell.h; sourceTree = "<group>"; };
+		71F44F441D53228D00BF6DB0 /* DownLoadingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadingTableViewCell.m; sourceTree = "<group>"; };
+		7AD3976F7B1E10B78DCD06E7 /* Pods-SLMultiDownLoadManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLMultiDownLoadManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-SLMultiDownLoadManager/Pods-SLMultiDownLoadManager.release.xcconfig"; sourceTree = "<group>"; };
+		FFFA7ACF2DF17AF30D7E9E82 /* libPods-SLMultiDownLoadManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SLMultiDownLoadManager.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				683E4BBED4D8D94C6BB13492 /* libPods-SLMultiDownLoadManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +107,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1304A7012A485CAE54D31EAA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				061E4D78E85254152C72C857 /* Pods-SLMultiDownLoadManager.debug.xcconfig */,
+				7AD3976F7B1E10B78DCD06E7 /* Pods-SLMultiDownLoadManager.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		718279031D51DA6D009E5C86 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +123,8 @@
 				718279281D51DA6D009E5C86 /* SLMultiDownLoadManagerTests */,
 				718279331D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests */,
 				7182790D1D51DA6D009E5C86 /* Products */,
+				1304A7012A485CAE54D31EAA /* Pods */,
+				96243DE0995CFA1F4BD2DBF3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +141,8 @@
 		7182790E1D51DA6D009E5C86 /* SLMultiDownLoadManager */ = {
 			isa = PBXGroup;
 			children = (
+				71F432111D5425C900C7574C /* tmp.png */,
+				718279421D51DB19009E5C86 /* SLMultiDownLoadManager */,
 				718279121D51DA6D009E5C86 /* AppDelegate.h */,
 				718279131D51DA6D009E5C86 /* AppDelegate.m */,
 				718279151D51DA6D009E5C86 /* ViewController.h */,
@@ -140,6 +182,76 @@
 			path = SLMultiDownLoadManagerUITests;
 			sourceTree = "<group>";
 		};
+		718279421D51DB19009E5C86 /* SLMultiDownLoadManager */ = {
+			isa = PBXGroup;
+			children = (
+				71F44F281D531F7F00BF6DB0 /* DownloadManager */,
+				71F44F321D531F7F00BF6DB0 /* UI */,
+			);
+			path = SLMultiDownLoadManager;
+			sourceTree = "<group>";
+		};
+		71F44F281D531F7F00BF6DB0 /* DownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				71F44F291D531F7F00BF6DB0 /* DownLoadHeader.h */,
+				71F44F2A1D531F7F00BF6DB0 /* SLDownLoadModel.h */,
+				71F44F2B1D531F7F00BF6DB0 /* SLDownLoadModel.m */,
+				71F44F2C1D531F7F00BF6DB0 /* SLDownLoadQueue.h */,
+				71F44F2D1D531F7F00BF6DB0 /* SLDownLoadQueue.m */,
+				71F44F2E1D531F7F00BF6DB0 /* SLFileManager.h */,
+				71F44F2F1D531F7F00BF6DB0 /* SLFileManager.m */,
+				71F44F301D531F7F00BF6DB0 /* SLSessionManager.h */,
+				71F44F311D531F7F00BF6DB0 /* SLSessionManager.m */,
+			);
+			path = DownloadManager;
+			sourceTree = "<group>";
+		};
+		71F44F321D531F7F00BF6DB0 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				71F44F331D531F7F00BF6DB0 /* Controller */,
+				71F44F341D531F7F00BF6DB0 /* Model */,
+				71F44F351D531F7F00BF6DB0 /* View */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		71F44F331D531F7F00BF6DB0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				71F44F3A1D531FAB00BF6DB0 /* DownloadViewController.h */,
+				71F44F3B1D531FAB00BF6DB0 /* DownloadViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		71F44F341D531F7F00BF6DB0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		71F44F351D531F7F00BF6DB0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				71F44F3D1D531FF400BF6DB0 /* DownLoadingTableView.h */,
+				71F44F3E1D531FF400BF6DB0 /* DownLoadingTableView.m */,
+				71F44F431D53228D00BF6DB0 /* DownLoadingTableViewCell.h */,
+				71F44F441D53228D00BF6DB0 /* DownLoadingTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		96243DE0995CFA1F4BD2DBF3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FFFA7ACF2DF17AF30D7E9E82 /* libPods-SLMultiDownLoadManager.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -147,9 +259,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 718279391D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManager" */;
 			buildPhases = (
+				73A5F5DBAE5EC03A821D7E72 /* [CP] Check Pods Manifest.lock */,
 				718279081D51DA6D009E5C86 /* Sources */,
 				718279091D51DA6D009E5C86 /* Frameworks */,
 				7182790A1D51DA6D009E5C86 /* Resources */,
+				AA8B5DD188F53C3D7F257D99 /* [CP] Embed Pods Frameworks */,
+				E2D3C4E38F0B9551829FD57C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -207,6 +322,7 @@
 				TargetAttributes = {
 					7182790B1D51DA6D009E5C86 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 329ZYF9D22;
 					};
 					718279241D51DA6D009E5C86 = {
 						CreatedOnToolsVersion = 7.3;
@@ -246,6 +362,7 @@
 				7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */,
 				7182791C1D51DA6D009E5C86 /* Assets.xcassets in Resources */,
 				7182791A1D51DA6D009E5C86 /* Main.storyboard in Resources */,
+				71F432121D5425C900C7574C /* tmp.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,12 +382,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		73A5F5DBAE5EC03A821D7E72 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AA8B5DD188F53C3D7F257D99 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SLMultiDownLoadManager/Pods-SLMultiDownLoadManager-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E2D3C4E38F0B9551829FD57C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SLMultiDownLoadManager/Pods-SLMultiDownLoadManager-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		718279081D51DA6D009E5C86 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71F44F391D531F7F00BF6DB0 /* SLSessionManager.m in Sources */,
+				71F44F451D53228D00BF6DB0 /* DownLoadingTableViewCell.m in Sources */,
+				71F44F381D531F7F00BF6DB0 /* SLFileManager.m in Sources */,
+				71F44F3C1D531FAB00BF6DB0 /* DownloadViewController.m in Sources */,
+				71F44F361D531F7F00BF6DB0 /* SLDownLoadModel.m in Sources */,
+				71F44F3F1D531FF400BF6DB0 /* DownLoadingTableView.m in Sources */,
 				718279171D51DA6D009E5C86 /* ViewController.m in Sources */,
+				71F44F371D531F7F00BF6DB0 /* SLDownLoadQueue.m in Sources */,
 				718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */,
 				718279111D51DA6D009E5C86 /* main.m in Sources */,
 			);
@@ -413,23 +585,31 @@
 		};
 		7182793A1D51DA6D009E5C86 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 061E4D78E85254152C72C857 /* Pods-SLMultiDownLoadManager.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = SLMultiDownLoadManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		7182793B1D51DA6D009E5C86 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AD3976F7B1E10B78DCD06E7 /* Pods-SLMultiDownLoadManager.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = SLMultiDownLoadManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = sunlei.SLMultiDownLoadManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -498,6 +678,7 @@
 				7182793B1D51DA6D009E5C86 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7182793C1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +687,7 @@
 				7182793E1D51DA6D009E5C86 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7182793F1D51DA6D009E5C86 /* Build configuration list for PBXNativeTarget "SLMultiDownLoadManagerUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +696,7 @@
 				718279411D51DA6D009E5C86 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
