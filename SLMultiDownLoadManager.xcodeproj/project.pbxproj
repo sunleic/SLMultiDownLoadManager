@@ -16,6 +16,7 @@
 		7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */; };
 		7182792A1D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279291D51DA6D009E5C86 /* SLMultiDownLoadManagerTests.m */; };
 		718279351D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */; };
+		71EE711E1D572AB30052EBA5 /* SLMultiDownLoad.gif in Resources */ = {isa = PBXBuildFile; fileRef = 71EE711D1D572AB30052EBA5 /* SLMultiDownLoad.gif */; };
 		71F432121D5425C900C7574C /* tmp.png in Resources */ = {isa = PBXBuildFile; fileRef = 71F432111D5425C900C7574C /* tmp.png */; };
 		71F44F361D531F7F00BF6DB0 /* SLDownLoadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F2B1D531F7F00BF6DB0 /* SLDownLoadModel.m */; };
 		71F44F371D531F7F00BF6DB0 /* SLDownLoadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F44F2D1D531F7F00BF6DB0 /* SLDownLoadQueue.m */; };
@@ -61,6 +62,7 @@
 		718279301D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLMultiDownLoadManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		718279341D51DA6D009E5C86 /* SLMultiDownLoadManagerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLMultiDownLoadManagerUITests.m; sourceTree = "<group>"; };
 		718279361D51DA6D009E5C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		71EE711D1D572AB30052EBA5 /* SLMultiDownLoad.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SLMultiDownLoad.gif; sourceTree = "<group>"; };
 		71F432111D5425C900C7574C /* tmp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmp.png; sourceTree = "<group>"; };
 		71F44F291D531F7F00BF6DB0 /* DownLoadHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadHeader.h; sourceTree = "<group>"; };
 		71F44F2A1D531F7F00BF6DB0 /* SLDownLoadModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLDownLoadModel.h; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				718279131D51DA6D009E5C86 /* AppDelegate.m */,
 				718279151D51DA6D009E5C86 /* ViewController.h */,
 				718279161D51DA6D009E5C86 /* ViewController.m */,
+				71EE711D1D572AB30052EBA5 /* SLMultiDownLoad.gif */,
 				718279181D51DA6D009E5C86 /* Main.storyboard */,
 				7182791B1D51DA6D009E5C86 /* Assets.xcassets */,
 				7182791D1D51DA6D009E5C86 /* LaunchScreen.storyboard */,
@@ -361,6 +364,7 @@
 			files = (
 				7182791F1D51DA6D009E5C86 /* LaunchScreen.storyboard in Resources */,
 				7182791C1D51DA6D009E5C86 /* Assets.xcassets in Resources */,
+				71EE711E1D572AB30052EBA5 /* SLMultiDownLoad.gif in Resources */,
 				7182791A1D51DA6D009E5C86 /* Main.storyboard in Resources */,
 				71F432121D5425C900C7574C /* tmp.png in Resources */,
 			);
