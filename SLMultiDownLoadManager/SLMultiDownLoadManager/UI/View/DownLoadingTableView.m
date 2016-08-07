@@ -120,8 +120,39 @@
                 break;
         }
     }
-    
-    
 }
+
+
+#pragma mark --删除cell
+//编辑的风格
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //返回删除效果
+    return UITableViewCellEditingStyleDelete;
+}
+//点击左边删除按钮时  显示的右边删除button的title
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+//提交编辑效果
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //当你删除时
+        //NSLog(@"第%lu行被删除了",indexPath.row);
+        //先将数据源中的数据删除了
+        [_dataArr removeObjectAtIndex:indexPath.row];
+        //以动画的形式删除指定的cell
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        
+        if (self.isDownLoadCompletedTableView == NO) {
+            [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+        }
+        
+    }
+}
+
 
 @end

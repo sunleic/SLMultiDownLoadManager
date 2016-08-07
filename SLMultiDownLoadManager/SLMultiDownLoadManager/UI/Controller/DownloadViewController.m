@@ -134,6 +134,8 @@
             [_tableViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
+            
+//            _tableViewTwo.editing = YES;
         }
         if (_tableViewOne) {
             _tableViewOne.hidden = YES;
