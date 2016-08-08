@@ -20,12 +20,15 @@
 
 //刷新下载
 -(void)updateDownLoad;
+//全部开始下载
+-(void)startDownloadAll;
 
 //恢复某一下载任务
 -(void)resumeWithDownLoadModel:(SLDownLoadModel *)model;
 
 //控制某一正在下载 暂停下载
 -(void)pauseWithDownLoadModel:(SLDownLoadModel *)model;
+//全部暂停
 -(void)pauseAll;
 
 +(SLDownLoadQueue *)downLoadQueue;

@@ -154,5 +154,11 @@
     }
 }
 
+-(void)dealloc{
+
+    NSLog(@"%s---%d",__func__,__LINE__);
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end

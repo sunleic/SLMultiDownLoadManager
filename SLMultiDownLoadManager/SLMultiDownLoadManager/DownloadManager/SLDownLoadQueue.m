@@ -226,7 +226,9 @@
 -(void)startDownloadAll{
     
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
-        model.downLoadState = DownLoadStateSuspend;
+        if (DownLoadStatePause == model.downLoadState) {
+            model.downLoadState = DownLoadStateSuspend;
+        }
     }
     
     [self updateDownLoad];
@@ -239,7 +241,6 @@
     if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
 
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-            
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
             [resumeData writeToFile:cachePath atomically:YES];
         }];
@@ -258,12 +259,14 @@
         //如果在下载状态或者等待下载状态则暂停
         if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
             
-            model.downLoadState = DownLoadStatePause;
             [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
                 NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
             model.downLoadTask = nil;
+            
+            //更改状态
+            model.downLoadState = DownLoadStatePause;
         }
     }
     //更新下载

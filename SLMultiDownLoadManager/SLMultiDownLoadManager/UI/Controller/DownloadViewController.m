@@ -99,9 +99,94 @@
         [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
         }];
+    
+        _tableViewOne.tableHeaderView = [self createHeaderViewWithTable:_tableViewOne];
     }
 }
 
+-(UIView *)createHeaderViewWithTable:(DownLoadingTableView *)tableView{
+   
+    
+    UIView *tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_W, 40)];
+    tableHeaderView.backgroundColor = [UIColor redColor];
+    
+    if (tableView.isDownLoadCompletedTableView) {
+        
+        UIButton *lookAllBtn = [UIButton new];
+        [lookAllBtn setTitle:@"点击查看全部" forState:UIControlStateNormal];
+        [lookAllBtn addTarget:self action:@selector(lookAllAction:) forControlEvents:UIControlEventTouchUpInside];
+        [tableHeaderView addSubview:lookAllBtn];
+        [lookAllBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(tableHeaderView);
+            make.width.mas_equalTo(200);
+            make.top.mas_equalTo(10);
+            make.bottom.mas_equalTo(-10);
+        }];
+        
+    }else{
+    
+        UIButton *allStartBtn = [UIButton new];
+        [allStartBtn setTitle:@"全部开始" forState:UIControlStateNormal];
+        //        allStartBtn.backgroundColor = [UIColor yellowColor];
+        [tableHeaderView addSubview:allStartBtn];
+        [allStartBtn addTarget:self action:@selector(allStartAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UILabel *lineLbl = [UILabel new];
+        lineLbl.backgroundColor = [UIColor purpleColor];
+        [tableHeaderView addSubview:lineLbl];
+        
+        UIButton *allStopBtn = [UIButton new];
+        [allStopBtn setTitle:@"全部暂停" forState:UIControlStateNormal];
+        //        allStopBtn.backgroundColor = [UIColor cyanColor];
+        [tableHeaderView addSubview:allStopBtn];
+        [allStopBtn addTarget:self action:@selector(allStopAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [allStartBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.mas_equalTo(tableHeaderView);
+            make.centerX.mas_equalTo(tableHeaderView).multipliedBy(1/2.0);
+            make.top.equalTo(tableHeaderView).offset(10);
+            make.bottom.equalTo(tableHeaderView).offset(-10);
+            make.width.mas_equalTo(80);
+        }];
+        
+        [lineLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(1);
+            make.centerX.equalTo(tableHeaderView);
+            make.top.mas_equalTo(8);
+            make.bottom.mas_equalTo(-8);
+        }];
+        
+        [allStopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.mas_equalTo(tableHeaderView);
+            make.centerX.mas_equalTo(tableHeaderView).multipliedBy(1+1/2.0);
+            make.top.equalTo(tableHeaderView).offset(10);
+            make.bottom.equalTo(tableHeaderView).offset(-10);
+            make.width.mas_equalTo(80);
+        }];
+    }
+    
+    return tableHeaderView;
+}
+
+//全部开始下载
+-(void)allStartAction:(UIButton *)button{
+    SLog(@"全部开始下载");
+    [[SLDownLoadQueue downLoadQueue] startDownloadAll];
+}
+
+//全部暂停下载
+-(void)allStopAction:(UIButton *)button{
+    SLog(@"全部暂停下载");
+    [[SLDownLoadQueue downLoadQueue] pauseAll];
+}
+
+//点击观看全部
+-(void)lookAllAction:(UIButton *)buttion{
+    SLog(@"点击查看全部");
+}
+
+
+#pragma mark -segmentControl
 -(void)segmentClick:(UISegmentedControl *)segmentCtl{
 
     NSInteger index = segmentCtl.selectedSegmentIndex;
@@ -115,6 +200,8 @@
             [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
+            
+            _tableViewOne.tableHeaderView = [self createHeaderViewWithTable:_tableViewOne];
         }
         
         if (_tableViewTwo) {
@@ -135,7 +222,7 @@
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
             
-//            _tableViewTwo.editing = YES;
+            _tableViewTwo.tableHeaderView = [self createHeaderViewWithTable:_tableViewTwo];
         }
         if (_tableViewOne) {
             _tableViewOne.hidden = YES;
