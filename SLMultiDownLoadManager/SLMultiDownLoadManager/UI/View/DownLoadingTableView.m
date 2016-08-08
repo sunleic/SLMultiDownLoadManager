@@ -36,7 +36,10 @@
         self.dataSource = self;
         self.delegate = self;
         
+        //任务下载完成
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downLoadFinished) name:DownLoadResourceFinished object:nil];
+        //要删除cell
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedCells) name:CellIsDeleted object:nil];
     }
     return self;
 }
@@ -78,8 +81,29 @@
         cell.progressLbl.hidden = NO;
         cell.progressView.hidden = NO;
     }
+    
+    [cell.selectBtn addTarget:self action:@selector(deleteBtn:) forControlEvents:UIControlEventTouchUpInside];
+    cell.selectBtn.tag = indexPath.row;
 
     return cell;
+}
+
+-(void)deleteBtn:(UIButton *)button{
+    
+    SLDownLoadModel *model = _dataArr[button.tag];
+    if (!model) {
+        return;
+    }
+    
+    DownLoadingTableViewCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:button.tag inSection:0]];
+  
+    if (model.isDelete == NO) {
+        model.isDelete = YES;
+        cell.selectBtn.backgroundColor = [UIColor redColor];
+    }else{
+        model.isDelete = NO;
+        cell.selectBtn.backgroundColor = [UIColor greenColor];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -122,7 +146,6 @@
     }
 }
 
-
 #pragma mark --删除cell
 //编辑的风格
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -142,6 +165,9 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //当你删除时
         //NSLog(@"第%lu行被删除了",indexPath.row);
+        
+        //删除视频和用于断点续传的缓存文件
+        
         //先将数据源中的数据删除了
         [_dataArr removeObjectAtIndex:indexPath.row];
         //以动画的形式删除指定的cell
@@ -150,14 +176,29 @@
         if (self.isDownLoadCompletedTableView == NO) {
             [[SLDownLoadQueue downLoadQueue] updateDownLoad];
         }
-        
+    }
+}
+
+//删除被选中的cell
+-(void)deleteSelectedCells{
+    
+    for (DownLoadingTableViewCell *cell in [self visibleCells]) {
+        if (cell.downLoadModel.isDelete) {
+            //要被删除的的cell的model，最后在更新
+            [_dataArr removeObject:cell.downLoadModel];
+        }
+    }
+    [self reloadData];
+    
+    //刷新下载任务
+    if (self.isDownLoadCompletedTableView == NO) {
+        [[SLDownLoadQueue downLoadQueue] updateDownLoad];
     }
 }
 
 -(void)dealloc{
 
     NSLog(@"%s---%d",__func__,__LINE__);
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

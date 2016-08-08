@@ -8,10 +8,7 @@
 
 #import "DownLoadingTableViewCell.h"
 
-@implementation DownLoadingTableViewCell{
-
-    UIImageView *_backgroundImg;
-}
+@implementation DownLoadingTableViewCell
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
 
@@ -28,6 +25,11 @@
     _backgroundImg.userInteractionEnabled = YES;
 //    _backgroundImg.backgroundColor = [UIColor purpleColor];
     [self.contentView addSubview:_backgroundImg];
+    
+    //选择是否删除的按钮
+    self.selectBtn = [UIButton new];
+    [_backgroundImg addSubview:self.selectBtn];
+    
     //缩略图
     self.imgView = [UIImageView new];
 //    _imgView.backgroundColor = [UIColor redColor];
@@ -65,8 +67,16 @@
         make.edges.equalTo(self.contentView).insets(UIEdgeInsetsMake(5, 0, 0, 0));
     }];
     
+    //被注释的部分，是在要点击编辑按钮的时候要实现的部分
+    [self.selectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.equalTo(_backgroundImg).offset(0);
+        make.bottom.equalTo(_backgroundImg).offset(0);
+        make.right.equalTo(self.imgView.mas_left).offset(0);
+        make.width.mas_equalTo(0);
+    }];
+    
     [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.equalTo(_backgroundImg).offset(0);
+        make.top.bottom.equalTo(_backgroundImg).offset(0);
         make.width.mas_equalTo(100);
     }];
     
@@ -102,12 +112,23 @@
 }
 
 -(void)setDownLoadModel:(SLDownLoadModel *)downLoadModel{
+    
+    if (downLoadModel == nil) {
+        SLog(@"下载模型为空");
+        return;
+    }
     if (_downLoadModel) {
         [self removeOberver];
     }
     _downLoadModel = downLoadModel;
     [self addObserver];
     
+    //删除按钮
+    if (_downLoadModel.isDelete) {
+        self.selectBtn.backgroundColor = [UIColor redColor];
+    }else{
+        self.selectBtn.backgroundColor = [UIColor greenColor];
+    }
     //标题
     self.titleLbl.text = _downLoadModel.title;
     if (_downLoadModel.downLoadState == DownLoadStateSuspend) {

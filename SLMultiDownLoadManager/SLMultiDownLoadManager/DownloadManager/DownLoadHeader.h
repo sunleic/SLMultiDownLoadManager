@@ -30,8 +30,10 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 #define FIEL_UUID  [[NSUUID UUID] UUIDString]
 
 //通知
+//下载完成
 #define DownLoadResourceFinished @"DownLoadResourceFinished"
-
+//删除下载列表中的cell
+#define CellIsDeleted @"CellIsDeleted"
 
 #import "AFNetworking.h"
 #import "Masonry.h"

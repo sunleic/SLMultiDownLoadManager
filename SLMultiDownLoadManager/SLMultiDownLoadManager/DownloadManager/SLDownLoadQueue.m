@@ -145,8 +145,8 @@
             
             //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
-            model.downLoadedByetes = model.totalByetes;
-            model.downLoadProgress = 1;
+            //model.downLoadedByetes = model.totalByetes;
+            //model.downLoadProgress = 1;
             
             NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
             return [NSURL fileURLWithPath:destinationStr];
@@ -186,8 +186,8 @@
             
            //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
-            model.downLoadedByetes = model.totalByetes;
-            model.downLoadProgress = 1;
+            //model.downLoadedByetes = model.totalByetes;
+            //model.downLoadProgress = 1;
             
             NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
             

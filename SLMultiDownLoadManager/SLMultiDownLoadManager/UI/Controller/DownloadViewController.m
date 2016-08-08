@@ -8,18 +8,23 @@
 
 #import "DownloadViewController.h"
 #import "DownLoadingTableView.h"
+#import "DownLoadingTableViewCell.h"
 #import "DownLoadHeader.h"
 #import "SLDownLoadQueue.h"
 #import "SLDownLoadModel.h"
 
 @interface DownloadViewController ()
 
+@property (nonatomic, strong) UISegmentedControl   *segmentCtl;
 @property (nonatomic, strong) DownLoadingTableView *tableViewOne; //下载中
 @property (nonatomic, strong) DownLoadingTableView *tableViewTwo; //下载完成
 
 @end
 
-@implementation DownloadViewController
+@implementation DownloadViewController{
+
+    NSMutableArray *_deleteCellArr;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,20 +32,169 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    //导航条编辑按钮
+    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editBtn.frame = CGRectMake(0, 0, 40, 30);
+    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [editBtn setTitleColor:[UIColor colorWithRed:0.00 green:0.48 blue:1.00 alpha:1.00] forState:UIControlStateNormal];
+    [editBtn addTarget:self action:@selector(editAction:) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *rightBarButtionItem = [[UIBarButtonItem alloc]initWithCustomView:editBtn];
+    self.navigationItem.rightBarButtonItem = rightBarButtionItem;
+    
+    //创建临时任务
     [self createDownloadTask];
+    //创建UI
     [self createContents];
 }
 
+-(void)setToolBarHidden:(BOOL)hidden animation:(BOOL)animate{
+
+    //toolbar
+    [self.navigationController setToolbarHidden:hidden animated:animate];
+    
+    UIButton *allSelectedBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+    [allSelectedBtn setTitle:@"全部选中" forState:UIControlStateNormal];
+    [allSelectedBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+    [allSelectedBtn addTarget:self action:@selector(allSelectedAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:allSelectedBtn];
+    
+    UIBarButtonItem *spaceItem =[ [UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    UIButton *deleteBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+    [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
+    [deleteBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
+    [deleteBtn addTarget:self action:@selector(deleteAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *deleteBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:deleteBtn];
+    
+    self.toolbarItems = @[leftBarButtonItem,spaceItem,deleteBarButtonItem];
+}
+
+//全部选中或全部不选中
+-(void)allSelectedAction:(UIButton *)button{
+    
+    if (button.selected) { //全选中
+        //SLog(@"全部非选中状态");
+        if (_segmentCtl.selectedSegmentIndex == 0) {
+            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
+                model.isDelete = NO;
+            }
+            [_tableViewOne reloadData];
+        }else{
+            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
+                model.isDelete = NO;
+            }
+            [_tableViewTwo reloadData];
+        }
+        
+    }else{
+        //SLog(@"全部选中状态");
+        if (_segmentCtl.selectedSegmentIndex == 0) {
+            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
+                model.isDelete = YES;
+            }
+            [_tableViewOne reloadData];
+        }else{
+            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
+                model.isDelete = YES;
+            }
+            [_tableViewTwo reloadData];
+        }
+    }
+    button.selected = !button.selected;
+}
+
+//删除
+-(void)deleteAction:(UIButton *)button{
+    //SLog(@"删除");
+    [[NSNotificationCenter defaultCenter] postNotificationName:CellIsDeleted object:nil];
+}
+
+//编辑按钮
+-(void)editAction:(UIButton *)button{
+    
+    if (button.selected) {  //执行编辑操作
+        //SLog(@"显示cell上的选中按钮");
+        //隐藏toolbar
+        [self setToolBarHidden:YES animation:YES];
+        [button setTitle:@"编辑" forState:UIControlStateNormal];
+        
+        if (_segmentCtl.selectedSegmentIndex == 0) {
+            
+            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewOne]) {
+                //重置约束
+                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    
+                    make.left.top.equalTo(cell.backgroundImg).offset(0);
+                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
+                    make.right.equalTo(cell.imgView.mas_left).offset(0);
+                    make.width.mas_equalTo(0);
+                }];
+            }
+        }else{
+        
+            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewTwo]) {
+                //重置约束
+                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    
+                    make.left.top.equalTo(cell.backgroundImg).offset(0);
+                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
+                    make.right.equalTo(cell.imgView.mas_left).offset(0);
+                    make.width.mas_equalTo(0);
+                }];
+            }
+        }
+        
+        
+    }else{
+        //SLog(@"隐藏cell上的选中按钮");
+        //显示toolbar
+        [self setToolBarHidden:NO animation:YES];
+        [button setTitle:@"取消" forState:UIControlStateNormal];
+  
+        if (_segmentCtl.selectedSegmentIndex == 0) {
+            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewOne]) {
+                //重置约束
+                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    
+                    make.left.top.equalTo(cell.backgroundImg).offset(20);
+                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
+                    make.right.equalTo(cell.imgView.mas_left).offset(-10);
+                    make.width.mas_equalTo(cell.selectBtn.mas_height);
+                }];
+            }
+        }else{
+            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewTwo]) {
+                //重置约束
+                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    
+                    make.left.top.equalTo(cell.backgroundImg).offset(20);
+                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
+                    make.right.equalTo(cell.imgView.mas_left).offset(-10);
+                    make.width.mas_equalTo(cell.selectBtn.mas_height);
+                }];
+            }
+        }
+    }
+    
+    button.selected = !button.selected;
+}
+
+//获得指定tableview的可见cell们
+-(NSArray *)getAllVisibleCellWithTableView:(UITableView *)tableView{
+
+    NSArray *arr = [tableView visibleCells];
+    return arr;
+}
+
+//此处只是为了测试临时添加的下载任务
 -(void)createDownloadTask{
     
     /*
      fileUUID;
      title;
      downLoadUrlStr;
-     totalByetes;
-     downLoadedByetes;
-     downLoadSpeed;
-     downLoadProgress;
+     downLoadState;
      */
     
     SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
@@ -85,12 +239,12 @@
 
 -(void)createContents{
     
-    UISegmentedControl *segmentCtl = [[UISegmentedControl alloc]initWithItems:@[@"下载中",@"已下载"]];
-    segmentCtl.selectedSegmentIndex = 0;
-    [segmentCtl setWidth:90 forSegmentAtIndex:0];
-    [segmentCtl setWidth:90 forSegmentAtIndex:1];
-    [segmentCtl addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
-    self.navigationItem.titleView = segmentCtl;
+    _segmentCtl = [[UISegmentedControl alloc]initWithItems:@[@"下载中",@"已下载"]];
+    _segmentCtl.selectedSegmentIndex = 0;
+    [_segmentCtl setWidth:90 forSegmentAtIndex:0];
+    [_segmentCtl setWidth:90 forSegmentAtIndex:1];
+    [_segmentCtl addTarget:self action:@selector(segmentClick:) forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.titleView = _segmentCtl;
     
     if (!_tableViewOne) {
         _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
@@ -108,7 +262,7 @@
    
     
     UIView *tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_W, 40)];
-    tableHeaderView.backgroundColor = [UIColor redColor];
+    tableHeaderView.backgroundColor = [UIColor colorWithRed:0.00 green:0.48 blue:1.00 alpha:1.00];
     
     if (tableView.isDownLoadCompletedTableView) {
         
@@ -170,13 +324,13 @@
 
 //全部开始下载
 -(void)allStartAction:(UIButton *)button{
-    SLog(@"全部开始下载");
+    //SLog(@"全部开始下载");
     [[SLDownLoadQueue downLoadQueue] startDownloadAll];
 }
 
 //全部暂停下载
 -(void)allStopAction:(UIButton *)button{
-    SLog(@"全部暂停下载");
+    //SLog(@"全部暂停下载");
     [[SLDownLoadQueue downLoadQueue] pauseAll];
 }
 
