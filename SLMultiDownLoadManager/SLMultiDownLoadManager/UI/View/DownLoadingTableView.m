@@ -10,6 +10,7 @@
 #import "DownLoadHeader.h"
 #import "DownLoadingTableViewCell.h"
 #import "SLDownLoadQueue.h"
+#import "SLFileManager.h"
 
 
 @interface DownLoadingTableView ()
@@ -167,7 +168,17 @@
         //NSLog(@"第%lu行被删除了",indexPath.row);
         
         //删除视频和用于断点续传的缓存文件
+        NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:[_dataArr[indexPath.row] fileUUID]];
         
+        if ([SLFileManager isExistPath:cachePath]) {
+            [SLFileManager deletePathWithName:cachePath];
+        }
+        
+        NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",[_dataArr[indexPath.row] fileUUID]]];
+        if ([SLFileManager isExistPath:destinationStr]) {
+            [SLFileManager deletePathWithName:destinationStr];
+        }
+
         //先将数据源中的数据删除了
         [_dataArr removeObjectAtIndex:indexPath.row];
         //以动画的形式删除指定的cell
@@ -184,6 +195,19 @@
     
     for (DownLoadingTableViewCell *cell in [self visibleCells]) {
         if (cell.downLoadModel.isDelete) {
+            
+            //删除视频和用于断点续传的缓存文件
+            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:[cell.downLoadModel fileUUID]];
+            
+            if ([SLFileManager isExistPath:cachePath]) {
+                [SLFileManager deletePathWithName:cachePath];
+            }
+            
+            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",[cell.downLoadModel fileUUID]]];
+            if ([SLFileManager isExistPath:destinationStr]) {
+                [SLFileManager deletePathWithName:destinationStr];
+            }
+            
             //要被删除的的cell的model，最后在更新
             [_dataArr removeObject:cell.downLoadModel];
         }
@@ -194,6 +218,9 @@
     if (self.isDownLoadCompletedTableView == NO) {
         [[SLDownLoadQueue downLoadQueue] updateDownLoad];
     }
+    
+    //每次批量删除之后要复位
+    self.deleteSucess();
 }
 
 -(void)dealloc{

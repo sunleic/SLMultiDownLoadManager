@@ -48,6 +48,7 @@
     [self createContents];
 }
 
+#pragma mark - 设置toolBar的隐藏或再显
 -(void)setToolBarHidden:(BOOL)hidden animation:(BOOL)animate{
 
     //toolbar
@@ -70,7 +71,7 @@
     self.toolbarItems = @[leftBarButtonItem,spaceItem,deleteBarButtonItem];
 }
 
-//全部选中或全部不选中
+#pragma mark - 全部选中或全部不选中
 -(void)allSelectedAction:(UIButton *)button{
     
     if (button.selected) { //全选中
@@ -104,80 +105,106 @@
     button.selected = !button.selected;
 }
 
-//删除
+#pragma mark - 删除
 -(void)deleteAction:(UIButton *)button{
     //SLog(@"删除");
     [[NSNotificationCenter defaultCenter] postNotificationName:CellIsDeleted object:nil];
 }
 
-//编辑按钮
+#pragma mark - 编辑按钮
 -(void)editAction:(UIButton *)button{
     
+    __weak typeof(self) weakSelf = self;
     if (button.selected) {  //执行编辑操作
-        //SLog(@"显示cell上的选中按钮");
-        //隐藏toolbar
-        [self setToolBarHidden:YES animation:YES];
+        //SLog(@"隐藏cell上的选中按钮");
         [button setTitle:@"编辑" forState:UIControlStateNormal];
         
         if (_segmentCtl.selectedSegmentIndex == 0) {
             
-            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewOne]) {
-                //重置约束
-                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    
-                    make.left.top.equalTo(cell.backgroundImg).offset(0);
-                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
-                    make.right.equalTo(cell.imgView.mas_left).offset(0);
-                    make.width.mas_equalTo(0);
-                }];
-            }
+            [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewOne];
+            //批量删除成功回调
+            _tableViewOne.deleteSucess = ^(){
+                //SLog(@"批量删除复位+++");
+                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
+                [weakSelf.tableViewOne reloadData];
+                [button setTitle:@"编辑" forState:UIControlStateNormal];
+                button.selected = !button.selected;
+            };
+            
         }else{
         
-            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewTwo]) {
-                //重置约束
-                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    
-                    make.left.top.equalTo(cell.backgroundImg).offset(0);
-                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
-                    make.right.equalTo(cell.imgView.mas_left).offset(0);
-                    make.width.mas_equalTo(0);
-                }];
-            }
+            [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
+            //批量删除成功回调
+            _tableViewTwo.deleteSucess = ^(){
+                //SLog(@"批量删除复位+++");
+                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
+                [weakSelf.tableViewTwo reloadData];
+                [button setTitle:@"编辑" forState:UIControlStateNormal];
+                button.selected = !button.selected;
+            };
         }
         
-        
     }else{
-        //SLog(@"隐藏cell上的选中按钮");
-        //显示toolbar
-        [self setToolBarHidden:NO animation:YES];
+        //SLog(@"显示cell上的选中按钮");
         [button setTitle:@"取消" forState:UIControlStateNormal];
   
         if (_segmentCtl.selectedSegmentIndex == 0) {
-            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewOne]) {
-                //重置约束
-                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    
-                    make.left.top.equalTo(cell.backgroundImg).offset(20);
-                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
-                    make.right.equalTo(cell.imgView.mas_left).offset(-10);
-                    make.width.mas_equalTo(cell.selectBtn.mas_height);
-                }];
-            }
+            
+            [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewOne];
+            //批量删除成功回调
+            _tableViewOne.deleteSucess = ^(){
+                //SLog(@"批量删除复位+++");
+                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
+                [weakSelf.tableViewOne reloadData];
+                [button setTitle:@"编辑" forState:UIControlStateNormal];
+                button.selected = !button.selected;
+            };
         }else{
-            for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:_tableViewTwo]) {
-                //重置约束
-                [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    
-                    make.left.top.equalTo(cell.backgroundImg).offset(20);
-                    make.bottom.equalTo(cell.backgroundImg).offset(-20);
-                    make.right.equalTo(cell.imgView.mas_left).offset(-10);
-                    make.width.mas_equalTo(cell.selectBtn.mas_height);
-                }];
-            }
+            [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewTwo];
+            //批量删除成功回调
+            _tableViewTwo.deleteSucess = ^(){
+                //SLog(@"批量删除复位+++");
+                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
+                [weakSelf.tableViewTwo reloadData];
+                [button setTitle:@"编辑" forState:UIControlStateNormal];
+                button.selected = !button.selected;
+            };
         }
     }
     
     button.selected = !button.selected;
+}
+
+//显示批量选择按钮
+-(void)remakeConstrainsToShowSelectedBtnOnTable:(UITableView *)table{
+    //显示toolbar
+    [self setToolBarHidden:NO animation:YES];
+    for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:table]) {
+        //重置约束
+        [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(cell.backgroundImg).offset(20);
+            make.bottom.equalTo(cell.backgroundImg).offset(-20);
+            make.right.equalTo(cell.imgView.mas_left).offset(-10);
+            make.width.mas_equalTo(cell.selectBtn.mas_height);
+        }];
+    }
+}
+
+//隐藏批量选择按钮
+-(void)remakeConstrainsToHideSelectedBtnOnTable:(UITableView *)table{
+    //隐藏toolbar
+    [self setToolBarHidden:YES animation:YES];
+    for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:table]) {
+        //重置约束
+        [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(cell.backgroundImg).offset(0);
+            make.bottom.equalTo(cell.backgroundImg).offset(-20);
+            make.right.equalTo(cell.imgView.mas_left).offset(0);
+            make.width.mas_equalTo(0);
+        }];
+    }
 }
 
 //获得指定tableview的可见cell们
@@ -238,7 +265,6 @@
 }
 
 -(void)createContents{
-    
     _segmentCtl = [[UISegmentedControl alloc]initWithItems:@[@"下载中",@"已下载"]];
     _segmentCtl.selectedSegmentIndex = 0;
     [_segmentCtl setWidth:90 forSegmentAtIndex:0];
@@ -249,18 +275,17 @@
     if (!_tableViewOne) {
         _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
         [self.view addSubview:_tableViewOne];
-        
+        //屏幕适配
         [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
         }];
-    
+        //头
         _tableViewOne.tableHeaderView = [self createHeaderViewWithTable:_tableViewOne];
     }
 }
 
 -(UIView *)createHeaderViewWithTable:(DownLoadingTableView *)tableView{
    
-    
     UIView *tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_W, 40)];
     tableHeaderView.backgroundColor = [UIColor colorWithRed:0.00 green:0.48 blue:1.00 alpha:1.00];
     
@@ -347,14 +372,15 @@
     if (0 == index) {
         
         if (!_tableViewOne) {
+            
             _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
             [self.view addSubview:_tableViewOne];
             _tableViewTwo.isDownLoadCompletedTableView = NO;
-            
+            //屏幕适配
             [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
-            
+            //头
             _tableViewOne.tableHeaderView = [self createHeaderViewWithTable:_tableViewOne];
         }
         
@@ -368,14 +394,17 @@
     }else if (1 == index){
         
         if (!_tableViewTwo) {
+            
             _tableViewTwo = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].completedDownLoadQueueArr];
             [self.view addSubview:_tableViewTwo];
             _tableViewTwo.isDownLoadCompletedTableView = YES;
             
+            //布局适配
             [_tableViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
             
+            //头
             _tableViewTwo.tableHeaderView = [self createHeaderViewWithTable:_tableViewTwo];
         }
         if (_tableViewOne) {

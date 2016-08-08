@@ -113,7 +113,7 @@
 }
 
 //删除制定路径的文件或目录
-+(BOOL)deleteDownloadRootDirWithName:(NSString *)pathName{
++(BOOL)deletePathWithName:(NSString *)pathName{
     
     if (pathName == nil) {
         NSLog(@"%s---%d---%@",__func__,__LINE__,@"你指定的路径为nil");
