@@ -184,7 +184,7 @@
             //注意：：：
             //在此处发送通知，当人下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
             
-           //此处只会调用一次，当下载完成后调用
+            //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
             //model.downLoadedByetes = model.totalByetes;
             //model.downLoadProgress = 1;
@@ -196,7 +196,7 @@
             //此处在下载完成和取消下载的时候都会被调用
             
             //NSLog(@"*********##%@",[[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]]);
-            NSLog(@"下载完成++++++");
+            NSLog(@"下载完成或暂停下载++++++");
             
             [weakSelf updateDownLoad];
             if (model.downLoadState == DownLoadStateDownloadfinished) {
@@ -263,8 +263,8 @@
                 NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
+            //置空
             model.downLoadTask = nil;
-            
             //更改状态
             model.downLoadState = DownLoadStatePause;
         }
@@ -287,6 +287,33 @@
         _completedDownLoadQueueArr = [NSMutableArray arrayWithCapacity:0];
     }
     return _completedDownLoadQueueArr;
+}
+
+-(void)appViewTerminate{
+    
+    //归档正在下载或等待下载的
+    NSString *downLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadQueueArr"];
+    
+    //暂停所有的下载以及等待下载的
+    [[SLDownLoadQueue downLoadQueue] pauseAll];
+    
+    
+    NSMutableData *downLoadData = [[NSMutableData alloc]init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:downLoadData];
+    
+    [archiver encodeObject:[[SLDownLoadQueue downLoadQueue] downLoadQueueArr] forKey:@"downLoadQueueArr"];
+    [archiver finishEncoding];
+    [downLoadData writeToFile:downLoadCachePath atomically:YES];
+    
+    //归档已经下载完的
+    NSString *completeDownLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadQueueArr"];
+    
+    NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
+    NSKeyedArchiver *archiver2 = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
+    
+    [archiver2 encodeObject:[[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr] forKey:@"completedDownLoadQueueArr"];
+    [archiver2 finishEncoding];
+    [completeDownLoadData writeToFile:completeDownLoadCachePath atomically:YES];
 }
 
 @end

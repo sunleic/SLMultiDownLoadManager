@@ -31,6 +31,9 @@
 //全部暂停
 -(void)pauseAll;
 
+//程序将要被杀死的时候
+-(void)appViewTerminate;
+
 +(SLDownLoadQueue *)downLoadQueue;
 
 @end

@@ -24,6 +24,7 @@
 @implementation DownloadViewController{
 
     NSMutableArray *_deleteCellArr;
+    UIButton *editBtn;
 }
 
 - (void)viewDidLoad {
@@ -33,7 +34,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     //导航条编辑按钮
-    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     editBtn.frame = CGRectMake(0, 0, 40, 30);
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [editBtn setTitleColor:[UIColor colorWithRed:0.00 green:0.48 blue:1.00 alpha:1.00] forState:UIControlStateNormal];
@@ -389,6 +390,17 @@
         }
         _tableViewOne.hidden = NO;
         
+        //为了确保，当某一个tableview正处于编辑状态的时候点击了segmentctl而出现的bug
+        //隐藏toolbar，并将所以的的isDelete=NO;
+        for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
+            model.isDelete = NO;
+        }
+        //toolbar
+        [self.navigationController setToolbarHidden:YES animated:YES];
+        editBtn.selected = NO;
+        [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
+        
         [_tableViewOne reloadData];
         
     }else if (1 == index){
@@ -411,6 +423,18 @@
             _tableViewOne.hidden = YES;
         }
         _tableViewTwo.hidden = NO;
+        
+       
+        //为了确保，当某一个tableview正处于编辑状态的时候点击了segmentctl而出现的bug
+        //隐藏toolbar，并将所以的的isDelete=NO;
+        for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
+            model.isDelete = NO;
+        }
+        //toolbar
+        [self.navigationController setToolbarHidden:YES animated:YES];
+        editBtn.selected = NO;
+        [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewOne];
         
         [_tableViewTwo reloadData];
     }
