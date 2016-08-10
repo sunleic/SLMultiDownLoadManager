@@ -123,12 +123,52 @@
     _downLoadModel = downLoadModel;
     [self addObserver];
     
-    //删除按钮
+    //删除按钮的选中状态
     if (_downLoadModel.isDelete) {
         self.selectBtn.backgroundColor = [UIColor redColor];
+        //重置约束
+        [_selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(_backgroundImg).offset(20);
+            make.bottom.equalTo(_backgroundImg).offset(-20);
+            make.right.equalTo(_imgView.mas_left).offset(-10);
+            make.width.mas_equalTo(_selectBtn.mas_height);
+        }];
+        
     }else{
         self.selectBtn.backgroundColor = [UIColor greenColor];
+        //重置约束
+        [_selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(_backgroundImg).offset(0);
+            make.bottom.equalTo(_backgroundImg).offset(-20);
+            make.right.equalTo(_imgView.mas_left).offset(0);
+            make.width.mas_equalTo(0);
+        }];
     }
+    
+    //编辑按钮的状态
+    if (_downLoadModel.isEditStatus) {
+        //重置约束
+        [_selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(_backgroundImg).offset(20);
+            make.bottom.equalTo(_backgroundImg).offset(-20);
+            make.right.equalTo(_imgView.mas_left).offset(-10);
+            make.width.mas_equalTo(_selectBtn.mas_height);
+        }];
+        
+    }else{
+        //重置约束
+        [_selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            
+            make.left.top.equalTo(_backgroundImg).offset(0);
+            make.bottom.equalTo(_backgroundImg).offset(-20);
+            make.right.equalTo(_imgView.mas_left).offset(0);
+            make.width.mas_equalTo(0);
+        }];
+    }
+    
     //标题
     self.titleLbl.text = _downLoadModel.title;
     if (_downLoadModel.downLoadState == DownLoadStateSuspend) {

@@ -160,38 +160,27 @@
 -(void)remakeConstrainsToShowSelectedBtnOnTable:(UITableView *)table{
     //显示toolbar
     [self setToolBarHidden:NO animation:YES];
-    for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:table]) {
-        //重置约束
-        [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            
-            make.left.top.equalTo(cell.backgroundImg).offset(20);
-            make.bottom.equalTo(cell.backgroundImg).offset(-20);
-            make.right.equalTo(cell.imgView.mas_left).offset(-10);
-            make.width.mas_equalTo(cell.selectBtn.mas_height);
-        }];
+    for (SLDownLoadModel *model in [self getAllModelWithTable:table]) {
+        model.isEditStatus = YES;
     }
+    [table reloadData];
 }
 
 //隐藏批量选择按钮
 -(void)remakeConstrainsToHideSelectedBtnOnTable:(UITableView *)table{
     //隐藏toolbar
     [self setToolBarHidden:YES animation:YES];
-    for (DownLoadingTableViewCell *cell in [self getAllVisibleCellWithTableView:table]) {
-        //重置约束
-        [cell.selectBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            
-            make.left.top.equalTo(cell.backgroundImg).offset(0);
-            make.bottom.equalTo(cell.backgroundImg).offset(-20);
-            make.right.equalTo(cell.imgView.mas_left).offset(0);
-            make.width.mas_equalTo(0);
-        }];
+    for (SLDownLoadModel *model in [self getAllModelWithTable:table]) {
+        model.isEditStatus = NO;
     }
+    
+    [table reloadData];
 }
 
 //获得指定tableview的可见cell们
--(NSArray *)getAllVisibleCellWithTableView:(UITableView *)tableView{
+-(NSArray *)getAllModelWithTable:(UITableView *)tableView{
 
-    NSArray *arr = [tableView visibleCells];
+    NSArray *arr = [(DownLoadingTableView *)tableView dataArr];
     return arr;
 }
 

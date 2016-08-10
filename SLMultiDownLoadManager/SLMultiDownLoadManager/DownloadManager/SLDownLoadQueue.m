@@ -246,7 +246,7 @@
             [resumeData writeToFile:cachePath atomically:YES];
             NSLog(@"=====______1----%@",[NSThread currentThread]);
         }];
-        model.downLoadTask = nil;
+//        model.downLoadTask = nil;
         NSLog(@"=====______2----%@",[NSThread currentThread]);
         //更改状态
         model.downLoadState = DownLoadStatePause;
@@ -268,7 +268,7 @@
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
             
-            model.downLoadTask = nil;
+//            model.downLoadTask = nil;
             //更改状态
             model.downLoadState = DownLoadStatePause;
             SLog(@"取消下载中。。。。。");

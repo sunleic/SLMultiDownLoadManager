@@ -15,8 +15,6 @@
 
 @interface DownLoadingTableView ()
 
-@property (nonatomic, strong) NSMutableArray *dataArr;
-
 @end
 
 @implementation DownLoadingTableView
@@ -192,23 +190,23 @@
 //删除被选中的cell
 -(void)deleteSelectedCells:(deleteSucess)deleteSucess{
     
-    for (DownLoadingTableViewCell *cell in [self visibleCells]) {
-        if (cell.downLoadModel.isDelete) {
+    for (SLDownLoadModel *model in self.dataArr) {
+        if (model.isDelete) {
             
             //删除视频和用于断点续传的缓存文件
-            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:[cell.downLoadModel fileUUID]];
+            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
             
             if ([SLFileManager isExistPath:cachePath]) {
                 [SLFileManager deletePathWithName:cachePath];
             }
             
-            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",[cell.downLoadModel fileUUID]]];
+            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
             if ([SLFileManager isExistPath:destinationStr]) {
                 [SLFileManager deletePathWithName:destinationStr];
             }
-            
+
             //要被删除的的cell的model，最后在更新
-            [_dataArr removeObject:cell.downLoadModel];
+            [_dataArr removeObject:model];
         }
     }
     [self reloadData];

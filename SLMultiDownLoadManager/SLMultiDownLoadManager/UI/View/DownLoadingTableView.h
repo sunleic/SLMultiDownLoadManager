@@ -12,6 +12,8 @@ typedef void(^deleteSucess)();
 
 @interface DownLoadingTableView : UITableView<UITableViewDataSource,UITableViewDelegate>
 
+@property (nonatomic, strong) NSMutableArray *dataArr; //数据源
+
 @property (nonatomic, assign) BOOL isDownLoadCompletedTableView; //表示是否是下载完成的table
 
 @property (nonatomic, copy) void(^deleteSucess)(); //批量删除成功回调
