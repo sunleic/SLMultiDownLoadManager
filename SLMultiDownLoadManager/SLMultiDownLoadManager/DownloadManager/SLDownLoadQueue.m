@@ -299,7 +299,7 @@
     return _completedDownLoadQueueArr;
 }
 
--(void)appViewTerminate{
+-(void)appWillTerminate{
     SLog(@"app将要被杀死。。。。");
     [self pauseAll];
     //给点时间进行异步暂停所有下载

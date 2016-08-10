@@ -24,6 +24,6 @@
 @property (nonatomic, assign)   float     downLoadSpeed;        //下载速度
 @property (nonatomic, assign)   float     downLoadProgress;     //下载进度  百分比
 
-@property (nonatomic, assign)   BOOL     isDelete;             //是否要被删除
+@property (nonatomic, assign)   BOOL      isDelete;             //是否要被删除
 
 @end
