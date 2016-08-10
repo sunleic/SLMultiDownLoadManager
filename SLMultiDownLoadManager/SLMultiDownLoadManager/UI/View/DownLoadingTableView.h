@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^deleteSucess)();
+
 @interface DownLoadingTableView : UITableView<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic, assign) BOOL isDownLoadCompletedTableView; //表示是否是下载完成的table
@@ -16,5 +18,8 @@
 
 
 - (instancetype)initWithFrame:(CGRect)rect style:(UITableViewStyle)tableViewStyle WithDataSource:(NSMutableArray *)dataSource;
+
+//删除被选中的cell
+-(void)deleteSelectedCells:(deleteSucess)deleteSucess;
 
 @end

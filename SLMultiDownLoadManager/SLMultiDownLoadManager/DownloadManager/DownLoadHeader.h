@@ -29,6 +29,10 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 
 #define FIEL_UUID  [[NSUUID UUID] UUIDString]
 
+//归档路径
+#define DownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadArchive"]
+#define CompletedDownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadArchive"]
+
 //通知
 //下载完成
 #define DownLoadResourceFinished @"DownLoadResourceFinished"

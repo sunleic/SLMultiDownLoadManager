@@ -43,8 +43,6 @@
     UIBarButtonItem *rightBarButtionItem = [[UIBarButtonItem alloc]initWithCustomView:editBtn];
     self.navigationItem.rightBarButtonItem = rightBarButtionItem;
     
-    //创建临时任务
-    [self createDownloadTask];
     //创建UI
     [self createContents];
 }
@@ -108,41 +106,41 @@
 
 #pragma mark - 删除
 -(void)deleteAction:(UIButton *)button{
+    
+    __weak typeof(self) weakSelf = self;
     //SLog(@"删除");
-    [[NSNotificationCenter defaultCenter] postNotificationName:CellIsDeleted object:nil];
+    if (_segmentCtl.selectedSegmentIndex == 0) {
+        
+        [_tableViewOne deleteSelectedCells:^{
+            //SLog(@"批量删除复位+++");
+            [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
+            [weakSelf.tableViewOne reloadData];
+            [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+            editBtn.selected = !editBtn.selected;
+        }];
+    }else{
+
+        [_tableViewTwo deleteSelectedCells:^{
+            //SLog(@"批量删除复位+++");
+            [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
+            [weakSelf.tableViewTwo reloadData];
+            [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+            editBtn.selected = !editBtn.selected;
+        }];
+    }
 }
 
 #pragma mark - 编辑按钮
 -(void)editAction:(UIButton *)button{
     
-    __weak typeof(self) weakSelf = self;
     if (button.selected) {  //执行编辑操作
         //SLog(@"隐藏cell上的选中按钮");
         [button setTitle:@"编辑" forState:UIControlStateNormal];
         
         if (_segmentCtl.selectedSegmentIndex == 0) {
-            
             [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewOne];
-            //批量删除成功回调
-            _tableViewOne.deleteSucess = ^(){
-                //SLog(@"批量删除复位+++");
-                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
-                [weakSelf.tableViewOne reloadData];
-                [button setTitle:@"编辑" forState:UIControlStateNormal];
-                button.selected = !button.selected;
-            };
-            
         }else{
-        
             [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
-            //批量删除成功回调
-            _tableViewTwo.deleteSucess = ^(){
-                //SLog(@"批量删除复位+++");
-                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
-                [weakSelf.tableViewTwo reloadData];
-                [button setTitle:@"编辑" forState:UIControlStateNormal];
-                button.selected = !button.selected;
-            };
         }
         
     }else{
@@ -150,29 +148,11 @@
         [button setTitle:@"取消" forState:UIControlStateNormal];
   
         if (_segmentCtl.selectedSegmentIndex == 0) {
-            
             [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewOne];
-            //批量删除成功回调
-            _tableViewOne.deleteSucess = ^(){
-                //SLog(@"批量删除复位+++");
-                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
-                [weakSelf.tableViewOne reloadData];
-                [button setTitle:@"编辑" forState:UIControlStateNormal];
-                button.selected = !button.selected;
-            };
         }else{
             [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewTwo];
-            //批量删除成功回调
-            _tableViewTwo.deleteSucess = ^(){
-                //SLog(@"批量删除复位+++");
-                [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
-                [weakSelf.tableViewTwo reloadData];
-                [button setTitle:@"编辑" forState:UIControlStateNormal];
-                button.selected = !button.selected;
-            };
         }
     }
-    
     button.selected = !button.selected;
 }
 
@@ -215,55 +195,7 @@
     return arr;
 }
 
-//此处只是为了测试临时添加的下载任务
--(void)createDownloadTask{
-    
-    /*
-     fileUUID;
-     title;
-     downLoadUrlStr;
-     downLoadState;
-     */
-    
-    SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
-    
-    model1.fileUUID = [[NSUUID UUID] UUIDString];
-    model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
-    model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-    model1.downLoadState = DownLoadStateSuspend;
-    
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model1];
-    
-    
-    SLDownLoadModel *model2 = [[SLDownLoadModel alloc]init];
-    
-    model2.fileUUID = [[NSUUID UUID] UUIDString];
-    model2.title = @"测试2.....";
-    model2.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-    model2.downLoadState = DownLoadStateSuspend;
-    
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model2];
-    
-    
-    SLDownLoadModel *model3 = [[SLDownLoadModel alloc]init];
-    
-    model3.fileUUID = [[NSUUID UUID] UUIDString];
-    model3.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
-    model3.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-    model3.downLoadState = DownLoadStateSuspend;
-    
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model3];
-    
-    
-    SLDownLoadModel *model4 = [[SLDownLoadModel alloc]init];
-    
-    model4.fileUUID = [[NSUUID UUID] UUIDString];
-    model4.title = @"测试2.....";
-    model4.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-    model4.downLoadState = DownLoadStateSuspend;
-    
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model4];
-}
+
 
 -(void)createContents{
     _segmentCtl = [[UISegmentedControl alloc]initWithItems:@[@"下载中",@"已下载"]];

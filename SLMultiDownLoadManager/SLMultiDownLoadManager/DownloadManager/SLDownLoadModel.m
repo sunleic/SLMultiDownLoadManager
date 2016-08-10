@@ -29,26 +29,23 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     
-    [aCoder encodeObject:self.downLoadTask forKey:@"downLoadTask"];
-    [aCoder encodeInteger:self.downLoadState forKey:@"downLoadState"];
+    [aCoder encodeObject:self.downLoadTask    forKey:@"downLoadTask"];
+    [aCoder encodeInteger:self.downLoadState  forKey:@"downLoadState"];
     
-    [aCoder encodeObject:self.fileUUID forKey:@"fileUUID"];
-    [aCoder encodeObject:self.title forKey:@"title"];
-    [aCoder encodeObject:self.downLoadUrlStr forKey:@"downLoadUrlStr"];
+    [aCoder encodeObject:self.fileUUID        forKey:@"fileUUID"];
+    [aCoder encodeObject:self.title           forKey:@"title"];
+    [aCoder encodeObject:self.downLoadUrlStr  forKey:@"downLoadUrlStr"];
     
-    [aCoder encodeFloat:self.totalByetes forKey:@"totalByetes"];
+    [aCoder encodeFloat:self.totalByetes      forKey:@"totalByetes"];
     [aCoder encodeFloat:self.downLoadedByetes forKey:@"downLoadedByetes"];
-    [aCoder encodeFloat:self.downLoadSpeed forKey:@"downLoadSpeed"];
+    [aCoder encodeFloat:self.downLoadSpeed    forKey:@"downLoadSpeed"];
     [aCoder encodeFloat:self.downLoadProgress forKey:@"downLoadProgress"];
     
-    [aCoder encodeBool:self.isDelete forKey:@"isDelete"];
-    
-    
+    [aCoder encodeBool:self.isDelete          forKey:@"isDelete"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder{
 
-    
     if (self = [super init]) {
         _downLoadTask     = [aDecoder decodeObjectForKey:@"downLoadTask"];
         _downLoadState    = [aDecoder decodeIntegerForKey:@"downLoadState"];

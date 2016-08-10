@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "DownLoadHeader.h"
 #import "DownloadViewController.h"
+#import "SLDownLoadModel.h"
+#import "SLDownLoadQueue.h"
 
 @interface ViewController ()
 
@@ -25,16 +27,52 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake(100, 200, 100, 40)];
+    UIButton *button1 = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_W - 200)/2, 100, 200, 40)];
+    button1.backgroundColor = [UIColor cyanColor];
+    [button1 setTitle:@"添加下载任务" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(btn1Action) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button1];
+    
+    UIButton *button = [[UIButton alloc]initWithFrame:CGRectMake((SCREEN_W - 200)/2, 200, 200, 40)];
     button.backgroundColor = [UIColor cyanColor];
+    [button setTitle:@"进入下载列表" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+}
+
+
+//添加下载任务
+-(void)btn1Action{
+    //创建临时任务
+    [self createDownloadTask];
 }
 
 -(void)btnAction{
 
     DownloadViewController *vc = [[DownloadViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+//此处只是为了测试临时添加的下载任务
+-(void)createDownloadTask{
+    
+    /*
+     fileUUID;
+     title;
+     downLoadUrlStr;
+     downLoadState;
+     */
+    
+    SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
+    
+    model1.fileUUID = [[NSUUID UUID] UUIDString];
+    model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
+    model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
+    model1.downLoadState = DownLoadStateSuspend;
+    
+    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model1];
+    
 }
 
 - (void)didReceiveMemoryWarning {

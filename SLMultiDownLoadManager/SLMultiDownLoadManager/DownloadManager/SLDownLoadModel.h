@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DownLoadHeader.h"
 
-@interface SLDownLoadModel : NSObject<NSCopying>
+@interface SLDownLoadModel : NSObject<NSCoding>
 
 
 @property (nonatomic, strong)   NSURLSessionDownloadTask *downLoadTask;  //当前资源下载任务

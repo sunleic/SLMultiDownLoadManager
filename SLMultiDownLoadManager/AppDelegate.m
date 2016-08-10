@@ -30,7 +30,9 @@
     [self.window makeKeyAndVisible];
     
     NSLog(@"%@",NSHomeDirectory());
-    [self getDownLoadCache];
+    
+    //获取缓存
+//    [self getDownLoadCache];
     
     return YES;
 }
@@ -40,12 +42,11 @@
     
     //读取下载任务，以及已经下载完成的
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
-    //待下载的
-    NSString *downLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadQueueArr"];
     //解归档待下载的
-    NSData *data1 = [[NSMutableData alloc] initWithContentsOfFile:downLoadCachePath];
+    NSData *data1 = [[NSMutableData alloc] initWithContentsOfFile:DownLoad_Archive];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data1];
     NSMutableArray *archivingdownLoadQueueArr = [unarchiver decodeObjectForKey:@"downLoadQueueArr"];
+    SLog(@"%@",archivingdownLoadQueueArr);
     [unarchiver finishDecoding];
     
     if (archivingdownLoadQueueArr) {
@@ -55,15 +56,19 @@
     }
     
     //解归档已下载完的
-    NSString *completeDownLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadQueueArr"];
-    
-    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:completeDownLoadCachePath];
+    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:CompletedDownLoad_Archive];
     NSKeyedUnarchiver *unarchiver2 = [[NSKeyedUnarchiver alloc] initForReadingWithData:data2];
     NSMutableArray *archivingArr = [unarchiver2 decodeObjectForKey:@"completedDownLoadQueueArr"];
+    SLog(@"%@",archivingArr);
     [unarchiver2 finishDecoding];
     
     if (archivingArr) {
-        queue.completedDownLoadQueueArr = [archivingArr copy];
+        
+        for (SLDownLoadModel *model in archivingArr) {
+            NSLog(@"++++++++");
+            [queue.completedDownLoadQueueArr addObject:model];
+        }
+        NSLog(@"-------------%lu",queue.completedDownLoadQueueArr.count);
     }
 }
 
@@ -90,7 +95,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     //app被杀死的时候做一些本地处理
-    [[SLDownLoadQueue downLoadQueue] appViewTerminate];
+//    [[SLDownLoadQueue downLoadQueue] appViewTerminate];
 }
 
 @end

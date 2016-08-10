@@ -39,8 +39,7 @@
         
         //任务下载完成
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downLoadFinished) name:DownLoadResourceFinished object:nil];
-        //要删除cell
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteSelectedCells) name:CellIsDeleted object:nil];
+
     }
     return self;
 }
@@ -191,7 +190,7 @@
 }
 
 //删除被选中的cell
--(void)deleteSelectedCells{
+-(void)deleteSelectedCells:(deleteSucess)deleteSucess{
     
     for (DownLoadingTableViewCell *cell in [self visibleCells]) {
         if (cell.downLoadModel.isDelete) {
@@ -215,12 +214,12 @@
     [self reloadData];
     
     //刷新下载任务
-    if (self.isDownLoadCompletedTableView == NO) {
-        [[SLDownLoadQueue downLoadQueue] updateDownLoad];
-    }
+    
+    [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+
     
     //每次批量删除之后要复位
-    self.deleteSucess();
+    deleteSucess();
 }
 
 -(void)dealloc{

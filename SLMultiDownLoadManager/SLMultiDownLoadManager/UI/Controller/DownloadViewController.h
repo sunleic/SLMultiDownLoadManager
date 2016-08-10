@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol DownloadViewControllerDelegate <NSObject>
+
+-(void)deleteSelectedCell;
+
+@end
+
 @interface DownloadViewController : UIViewController
+
+@property (nonatomic, assign) id <DownloadViewControllerDelegate> delegate;
 
 @end

@@ -240,12 +240,14 @@
     NSLog(@"***********暂停************");
     if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
 
+        //取消是异步的
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
             [resumeData writeToFile:cachePath atomically:YES];
+            NSLog(@"=====______1----%@",[NSThread currentThread]);
         }];
         model.downLoadTask = nil;
-        
+        NSLog(@"=====______2----%@",[NSThread currentThread]);
         //更改状态
         model.downLoadState = DownLoadStatePause;
         //更新下载
@@ -258,19 +260,27 @@
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
         //如果在下载状态或者等待下载状态则暂停
         if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
-            
+        
+            //取消下载是异步的
             [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+    
                 NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
-            //置空
+            
             model.downLoadTask = nil;
             //更改状态
             model.downLoadState = DownLoadStatePause;
+            SLog(@"取消下载中。。。。。");
         }
     }
     //更新下载
     [self updateDownLoad];
+}
+
+-(void)pauseAllWithAPPWillTerminate{
+    
+
 }
 
 #pragma mark - 懒加载
@@ -290,30 +300,29 @@
 }
 
 -(void)appViewTerminate{
+    SLog(@"app将要被杀死。。。。");
+    [self pauseAll];
+    //给点时间进行异步暂停所有下载
+    sleep(10);
     
     //归档正在下载或等待下载的
-    NSString *downLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadQueueArr"];
-    
-    //暂停所有的下载以及等待下载的
-    [[SLDownLoadQueue downLoadQueue] pauseAll];
-    
-    
     NSMutableData *downLoadData = [[NSMutableData alloc]init];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:downLoadData];
-    
-    [archiver encodeObject:[[SLDownLoadQueue downLoadQueue] downLoadQueueArr] forKey:@"downLoadQueueArr"];
+    [archiver encodeObject:self.downLoadQueueArr forKey:@"downLoadQueueArr"];
+    SLog(@"%@",self.downLoadQueueArr);
     [archiver finishEncoding];
-    [downLoadData writeToFile:downLoadCachePath atomically:YES];
+    [downLoadData writeToFile:DownLoad_Archive atomically:YES];
     
     //归档已经下载完的
-    NSString *completeDownLoadCachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadQueueArr"];
     
     NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
     NSKeyedArchiver *archiver2 = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
     
-    [archiver2 encodeObject:[[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr] forKey:@"completedDownLoadQueueArr"];
+    [archiver2 encodeObject:self.completedDownLoadQueueArr forKey:@"completedDownLoadQueueArr"];
+    SLog(@"%@",self.completedDownLoadQueueArr);
     [archiver2 finishEncoding];
-    [completeDownLoadData writeToFile:completeDownLoadCachePath atomically:YES];
+    [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+    
 }
 
 @end
