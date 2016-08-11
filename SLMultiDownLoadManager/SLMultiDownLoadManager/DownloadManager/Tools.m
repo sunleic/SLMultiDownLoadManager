@@ -12,7 +12,7 @@
 
 @implementation Tools
 
-+ (void)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr{
++ (BOOL)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr{
 
     //归档已经下载完的
     NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
@@ -21,7 +21,21 @@
     [archiver encodeObject:arr forKey:keyStr];
     //SLog(@"%@",self.completedDownLoadQueueArr);
     [archiver finishEncoding];
-    [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+    
+    BOOL isSucess = [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+    
+    return isSucess;
+}
+
++ (NSMutableArray *)unArchiveCompleteDownLoadModelWithKey:(NSString *)key{
+    //解归档已下载完的
+    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:CompletedDownLoad_Archive];
+    NSKeyedUnarchiver *unarchiver2 = [[NSKeyedUnarchiver alloc] initForReadingWithData:data2];
+    NSMutableArray *archivingArr = [unarchiver2 decodeObjectForKey:key];
+    //SLog(@"%@",archivingArr);
+    [unarchiver2 finishDecoding];
+
+    return archivingArr;
 }
 
 @end

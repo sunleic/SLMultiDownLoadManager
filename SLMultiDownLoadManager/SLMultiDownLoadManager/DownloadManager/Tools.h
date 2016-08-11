@@ -10,7 +10,10 @@
 
 @interface Tools : NSObject
 
-//归档
-+ (void)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr;
+//归档下载完的model数组
++ (BOOL)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr;
+
+//返回解归档下载完的model数组
++ (NSMutableArray *)unArchiveCompleteDownLoadModelWithKey:(NSString *)key;
 
 @end

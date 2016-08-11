@@ -10,6 +10,7 @@
 #import "ViewController.h"
 #import "SLFileManager.h"
 #import "SLDownLoadQueue.h"
+#import "Tools.h"
 
 @interface AppDelegate ()
 
@@ -42,30 +43,11 @@
     
     //读取下载任务，以及已经下载完成的
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
-    //解归档待下载的
-//    NSData *data1 = [[NSMutableData alloc] initWithContentsOfFile:DownLoad_Archive];
-//    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data1];
-//    NSMutableArray *archivingdownLoadQueueArr = [unarchiver decodeObjectForKey:@"downLoadQueueArr"];
-//    SLog(@"%@",archivingdownLoadQueueArr);
-//    [unarchiver finishDecoding];
-//    
-//    if (archivingdownLoadQueueArr) {
-//        for (SLDownLoadModel *model in archivingdownLoadQueueArr) {
-//            [queue addDownTaskWithDownLoadModel:model];
-//        }
-//    }
     
-    //解归档已下载完的
-    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:CompletedDownLoad_Archive];
-    NSKeyedUnarchiver *unarchiver2 = [[NSKeyedUnarchiver alloc] initForReadingWithData:data2];
-    NSMutableArray *archivingArr = [unarchiver2 decodeObjectForKey:@"completedDownLoadQueueArr"];
-    SLog(@"%@",archivingArr);
-    [unarchiver2 finishDecoding];
-    
-    if (archivingArr) {
-        
-        for (SLDownLoadModel *model in archivingArr) {
-            NSLog(@"++++++++");
+    //解归档以前已下载完的
+    NSMutableArray *arrTmp = [Tools unArchiveCompleteDownLoadModelWithKey:@"completedDownLoadQueueArr"];
+    if (arrTmp) {
+        for (SLDownLoadModel *model in arrTmp) {
             [queue.completedDownLoadQueueArr addObject:model];
         }
     }

@@ -100,7 +100,6 @@
 -(void)completedDownLoadWithModel:(SLDownLoadModel *)model{
     
     //将已经下载完成的任务添加到下载完成数据源
-    
     if ([self.downLoadQueueArr containsObject:model]) {
         //需要把此属性置空才能归档
         model.downLoadTask = nil;
@@ -262,10 +261,8 @@
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
             [resumeData writeToFile:cachePath atomically:YES];
-            NSLog(@"=====______1----%@",[NSThread currentThread]);
         }];
         model.downLoadTask = nil;
-        NSLog(@"=====______2----%@",[NSThread currentThread]);
         //更改状态
         model.downLoadState = DownLoadStatePause;
         //更新下载
@@ -286,7 +283,7 @@
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
             
-//            model.downLoadTask = nil;
+            model.downLoadTask = nil;
             //更改状态
             model.downLoadState = DownLoadStatePause;
             SLog(@"取消下载中。。。。。");
