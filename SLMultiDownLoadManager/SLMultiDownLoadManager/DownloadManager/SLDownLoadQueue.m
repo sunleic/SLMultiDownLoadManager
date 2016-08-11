@@ -77,7 +77,7 @@
     if (model) {
         SLDownLoadModel *modelTmp = model;
         modelTmp.downLoadState = DownLoadStateSuspend;
-        
+        SLog(@"%@",modelTmp.fileUUID);
         [self.downLoadQueueArr addObject:modelTmp];
         [self updateDownLoad];
     }

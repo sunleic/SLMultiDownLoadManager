@@ -104,13 +104,13 @@
     button.selected = !button.selected;
 }
 
-#pragma mark - 删除
+#pragma mark - 底部删除按钮
 -(void)deleteAction:(UIButton *)button{
     
     __weak typeof(self) weakSelf = self;
-    //SLog(@"删除");
+    
     if (_segmentCtl.selectedSegmentIndex == 0) {
-        
+        SLog(@"删除");
         [_tableViewOne deleteSelectedCells:^{
             //SLog(@"批量删除复位+++");
             [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
@@ -180,8 +180,15 @@
 //获得指定tableview的可见cell们
 -(NSArray *)getAllModelWithTable:(UITableView *)tableView{
 
-    NSArray *arr = [(DownLoadingTableView *)tableView dataArr];
-    return arr;
+    DownLoadingTableView *table = (DownLoadingTableView *)tableView;
+
+    if (table.isDownLoadCompletedTableView) {
+        
+        return [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr];
+    }else{
+        return [[SLDownLoadQueue downLoadQueue] downLoadQueueArr];
+    }
+    
 }
 
 
@@ -196,6 +203,7 @@
     
     if (!_tableViewOne) {
         _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
+        _tableViewOne.isDownLoadCompletedTableView = NO;
         [self.view addSubview:_tableViewOne];
         //屏幕适配
         [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {

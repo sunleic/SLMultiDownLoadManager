@@ -24,8 +24,6 @@
     self = [super initWithFrame:rect style:tableViewStyle];
     if (self) {
         
-        self.isDownLoadCompletedTableView = NO;
-        
         if (dataSource) {
             self.dataArr = dataSource;
         }else{
@@ -92,16 +90,8 @@
     if (!model) {
         return;
     }
-    
-    DownLoadingTableViewCell *cell = [self cellForRowAtIndexPath:[NSIndexPath indexPathForRow:button.tag inSection:0]];
-  
-    if (model.isDelete == NO) {
-        model.isDelete = YES;
-        cell.selectBtn.backgroundColor = [UIColor redColor];
-    }else{
-        model.isDelete = NO;
-        cell.selectBtn.backgroundColor = [UIColor greenColor];
-    }
+    model.isDelete = !model.isDelete;
+    [self reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -190,7 +180,11 @@
 //删除被选中的cell
 -(void)deleteSelectedCells:(deleteSucess)deleteSucess{
     
-    for (SLDownLoadModel *model in self.dataArr) {
+    SLog(@"++++++++++===：：%@",_dataArr);
+    
+    NSMutableArray *deleteArr = [NSMutableArray arrayWithCapacity:0];
+    
+    for (SLDownLoadModel *model in _dataArr) {
         if (model.isDelete) {
             
             //删除视频和用于断点续传的缓存文件
@@ -206,13 +200,20 @@
             }
 
             //要被删除的的cell的model，最后在更新
-            [_dataArr removeObject:model];
+            SLog(@"要被删除的---前：：%@",_dataArr);
+            
+            [deleteArr addObject:model];
+            SLog(@"要被删除的---后：：%@",_dataArr);
         }
     }
+    
+    for (SLDownLoadModel *model in deleteArr) {
+        [_dataArr removeObject:model];
+    }
+    
     [self reloadData];
     
     //刷新下载任务
-    
     [[SLDownLoadQueue downLoadQueue] updateDownLoad];
 
     
