@@ -32,7 +32,7 @@
     NSLog(@"%@",NSHomeDirectory());
     
     //获取缓存
-//    [self getDownLoadCache];
+    [self getDownLoadCache];
     
     return YES;
 }
@@ -43,17 +43,17 @@
     //读取下载任务，以及已经下载完成的
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
     //解归档待下载的
-    NSData *data1 = [[NSMutableData alloc] initWithContentsOfFile:DownLoad_Archive];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data1];
-    NSMutableArray *archivingdownLoadQueueArr = [unarchiver decodeObjectForKey:@"downLoadQueueArr"];
-    SLog(@"%@",archivingdownLoadQueueArr);
-    [unarchiver finishDecoding];
-    
-    if (archivingdownLoadQueueArr) {
-        for (SLDownLoadModel *model in archivingdownLoadQueueArr) {
-            [queue addDownTaskWithDownLoadModel:model];
-        }
-    }
+//    NSData *data1 = [[NSMutableData alloc] initWithContentsOfFile:DownLoad_Archive];
+//    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data1];
+//    NSMutableArray *archivingdownLoadQueueArr = [unarchiver decodeObjectForKey:@"downLoadQueueArr"];
+//    SLog(@"%@",archivingdownLoadQueueArr);
+//    [unarchiver finishDecoding];
+//    
+//    if (archivingdownLoadQueueArr) {
+//        for (SLDownLoadModel *model in archivingdownLoadQueueArr) {
+//            [queue addDownTaskWithDownLoadModel:model];
+//        }
+//    }
     
     //解归档已下载完的
     NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:CompletedDownLoad_Archive];
@@ -68,7 +68,6 @@
             NSLog(@"++++++++");
             [queue.completedDownLoadQueueArr addObject:model];
         }
-        NSLog(@"-------------%lu",queue.completedDownLoadQueueArr.count);
     }
 }
 

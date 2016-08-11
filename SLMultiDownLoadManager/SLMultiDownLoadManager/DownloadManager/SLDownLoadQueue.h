@@ -32,7 +32,7 @@
 -(void)pauseAll;
 
 //程序将要被杀死的时候
--(void)appViewTerminate;
+//-(void)appViewTerminate;
 
 +(SLDownLoadQueue *)downLoadQueue;
 

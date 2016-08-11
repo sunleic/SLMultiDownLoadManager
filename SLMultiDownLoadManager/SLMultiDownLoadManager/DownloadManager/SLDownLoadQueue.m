@@ -70,31 +70,6 @@
     }
 }
 
-/*
- @property (nonatomic, strong)   NSURLSessionDownloadTask *downLoadTask;  //当前资源下载任务
- @property (nonatomic, assign)   DownLoadState downLoadState;             //当前下载状态
- 
- @property (nonatomic, copy)     NSString *fileUUID;             //生成的UUID作为文件名
- @property (nonatomic, copy)     NSString *title;                //下载资源的标题
- @property (nonatomic, copy)     NSString *downLoadUrlStr;       //下载资源的URL
- 
- @property (nonatomic, assign)   float     totalByetes;          //下载资源的总大小
- @property (nonatomic, assign)   float     downLoadedByetes;     //当前已下载量的大小
- @property (nonatomic, assign)   float     downLoadSpeed;        //下载速度
- @property (nonatomic, assign)   float     downLoadProgress;     //下载进度  百分比
- 
- @property (nonatomic, assign)   BOOL      isDelete;             //是否要被删除
- @property (nonatomic, assign)   BOOL      isEditStatus;         //是否在编辑状态
-
-SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
-
- model1.fileUUID = [[NSUUID UUID] UUIDString];
-model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
-model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
-
-[[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model1];
-*/
-
 #pragma mark - 添加下载任务到下载队列中
 
 -(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
@@ -126,12 +101,24 @@ model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/953352280
     //将已经下载完成的任务添加到下载完成数据源
     
     if ([self.downLoadQueueArr containsObject:model]) {
+        //需要把此属性置空才能归档
+        model.downLoadTask = nil;
         [self.completedDownLoadQueueArr addObject:model];
         [self.downLoadQueueArr removeObject:model];
     }
-
+    
     [self updateDownLoad];
     [[NSNotificationCenter defaultCenter] postNotificationName:DownLoadResourceFinished object:nil];
+    
+    //归档已经下载完的
+    NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
+    
+    [archiver encodeObject:self.completedDownLoadQueueArr forKey:@"completedDownLoadQueueArr"];
+    SLog(@"%@",self.completedDownLoadQueueArr);
+    [archiver finishEncoding];
+    [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+
 }
 
 
