@@ -11,6 +11,7 @@
 #import "DownLoadingTableViewCell.h"
 #import "SLDownLoadQueue.h"
 #import "SLFileManager.h"
+#import "Tools.h"
 
 
 @interface DownLoadingTableView ()
@@ -170,6 +171,9 @@
         //以动画的形式删除指定的cell
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
         
+        //将剩下的下载完的的进行归档
+        [Tools archiveCompleteDownLoadModelWithModelArr:_dataArr withKey:@"completedDownLoadQueueArr"];
+        
         if (self.isDownLoadCompletedTableView == NO) {
             [[SLDownLoadQueue downLoadQueue] updateDownLoad];
         }
@@ -204,6 +208,9 @@
     for (SLDownLoadModel *model in deleteArr) {
         [_dataArr removeObject:model];
     }
+    
+    //将剩下的下载完的的进行归档
+    [Tools archiveCompleteDownLoadModelWithModelArr:_dataArr withKey:@"completedDownLoadQueueArr"];
     
     [self reloadData];
     //刷新下载任务

@@ -7,6 +7,7 @@
 //
 
 #import "SLDownLoadQueue.h"
+#import "Tools.h"
 #import "SLSessionManager.h"
 #import "SLFileManager.h"
 
@@ -110,15 +111,8 @@
     [self updateDownLoad];
     [[NSNotificationCenter defaultCenter] postNotificationName:DownLoadResourceFinished object:nil];
     
-    //归档已经下载完的
-    NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
-    
-    [archiver encodeObject:self.completedDownLoadQueueArr forKey:@"completedDownLoadQueueArr"];
-    SLog(@"%@",self.completedDownLoadQueueArr);
-    [archiver finishEncoding];
-    [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
-
+    //将下载完的的进行归档
+    [Tools archiveCompleteDownLoadModelWithModelArr:self.completedDownLoadQueueArr withKey:@"completedDownLoadQueueArr"];
 }
 
 
@@ -270,7 +264,7 @@
             [resumeData writeToFile:cachePath atomically:YES];
             NSLog(@"=====______1----%@",[NSThread currentThread]);
         }];
-//        model.downLoadTask = nil;
+        model.downLoadTask = nil;
         NSLog(@"=====______2----%@",[NSThread currentThread]);
         //更改状态
         model.downLoadState = DownLoadStatePause;
