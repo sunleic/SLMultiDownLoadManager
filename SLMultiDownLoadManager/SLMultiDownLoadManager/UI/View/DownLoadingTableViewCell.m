@@ -114,11 +114,12 @@
 -(void)setDownLoadModel:(SLDownLoadModel *)downLoadModel{
     
     if (downLoadModel == nil) {
-        SLog(@"下载模型为空");
+        SLog(@"下载数据模型为空");
         return;
     }
     if (_downLoadModel) {
         [self removeOberver];
+        _downLoadModel = nil;
     }
     _downLoadModel = downLoadModel;
     [self addObserver];
@@ -168,17 +169,8 @@
             make.width.mas_equalTo(0);
         }];
     }
-    
-    //标题
-    self.titleLbl.text = _downLoadModel.title;
-    if (_downLoadModel.downLoadState == DownLoadStateSuspend) {
-        self.statusLbl.text = @"等待下载";
-    }else if (_downLoadModel.downLoadState == DownLoadStateDownloadfinished){
-        self.statusLbl.text = @"下载完成";
-        self.progressView.progress = 1;
-    }else if (_downLoadModel.downLoadState == DownLoadStatePause){
-        self.statusLbl.text = @"暂停下载";
-    }
+    //赋值
+    [self setValueForCell];
 }
 
 -(void)addObserver{
@@ -206,33 +198,40 @@
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
     
     dispatch_async(dispatch_get_main_queue(), ^{
-    
-        if (_downLoadModel.downLoadState == DownLoadStatePause) {
-            self.statusLbl.text = @"暂停下载";
-        }else if (_downLoadModel.downLoadState == DownLoadStateSuspend){
-            self.statusLbl.text = @"等待下载";
-        }else if (_downLoadModel.downLoadState == DownLoadStateDownloadfinished){
-            self.statusLbl.text = @"下载完成";
-        }else{
-            
-            float value = _downLoadModel.downLoadSpeed;
-            if (value >= 0 && value < 1024 ) {
-                
-                self.statusLbl.text = [NSString stringWithFormat:@"%.2fB/s",value];
-            }else if (value >= 1024 && value < 1024 * 1024){
-                
-                self.statusLbl.text = [NSString stringWithFormat:@"%.2fKB/s",value/1024];
-            }else if (value >= 1024 * 1024 && value < 1024 * 1024 * 1024){
-                
-                self.statusLbl.text = [NSString stringWithFormat:@"%.2fMB/s",value/1024/1024];
-            }
-        }
-        
-        self.progressLbl.text = [NSString stringWithFormat:@"%.1fM/%.0fM",_downLoadModel.downLoadedByetes/(1024*1024),_downLoadModel.totalByetes/(1024*1024)];
-        
-        self.progressView.progress = _downLoadModel.downLoadProgress;
-
+        //刷新UI
+        [self setValueForCell];
     });
+}
+
+//给cell对应的属性赋值
+-(void)setValueForCell{
+
+    //标题
+    self.titleLbl.text = _downLoadModel.title;
+    if (_downLoadModel.downLoadState == DownLoadStatePause) {
+        self.statusLbl.text = @"暂停下载";
+    }else if (_downLoadModel.downLoadState == DownLoadStateSuspend){
+        self.statusLbl.text = @"等待下载";
+    }else if (_downLoadModel.downLoadState == DownLoadStateDownloadfinished){
+        self.statusLbl.text = @"下载完成";
+    }else{
+        
+        float value = _downLoadModel.downLoadSpeed;
+        if (value >= 0 && value < 1024 ) {
+            
+            self.statusLbl.text = [NSString stringWithFormat:@"%.2fB/s",value];
+        }else if (value >= 1024 && value < 1024 * 1024){
+            
+            self.statusLbl.text = [NSString stringWithFormat:@"%.2fKB/s",value/1024];
+        }else if (value >= 1024 * 1024 && value < 1024 * 1024 * 1024){
+            
+            self.statusLbl.text = [NSString stringWithFormat:@"%.2fMB/s",value/1024/1024];
+        }
+    }
+    
+    self.progressLbl.text = [NSString stringWithFormat:@"%.1fM/%.0fM",_downLoadModel.downLoadedByetes/(1024*1024),_downLoadModel.totalByetes/(1024*1024)];
+    
+    self.progressView.progress = _downLoadModel.downLoadProgress;
 }
 
 -(void)dealloc{

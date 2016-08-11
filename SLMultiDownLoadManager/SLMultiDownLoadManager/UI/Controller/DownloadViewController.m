@@ -191,8 +191,6 @@
     
 }
 
-
-
 -(void)createContents{
     _segmentCtl = [[UISegmentedControl alloc]initWithItems:@[@"下载中",@"已下载"]];
     _segmentCtl.selectedSegmentIndex = 0;
@@ -216,7 +214,7 @@
 
 -(UIView *)createHeaderViewWithTable:(DownLoadingTableView *)tableView{
    
-    UIView *tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_W, 40)];
+    UIView *tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
     tableHeaderView.backgroundColor = [UIColor colorWithRed:0.00 green:0.48 blue:1.00 alpha:1.00];
     
     if (tableView.isDownLoadCompletedTableView) {
@@ -250,12 +248,10 @@
         [tableHeaderView addSubview:allStopBtn];
         [allStopBtn addTarget:self action:@selector(allStopAction:) forControlEvents:UIControlEventTouchUpInside];
         
+        
         [allStartBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.mas_equalTo(tableHeaderView);
-            make.centerX.mas_equalTo(tableHeaderView).multipliedBy(1/2.0);
-            make.top.equalTo(tableHeaderView).offset(10);
-            make.bottom.equalTo(tableHeaderView).offset(-10);
-            make.width.mas_equalTo(80);
+            make.top.left.equalTo(tableHeaderView);
+            make.width.equalTo(tableHeaderView).multipliedBy(0.48);
         }];
         
         [lineLbl mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -264,13 +260,10 @@
             make.top.mas_equalTo(8);
             make.bottom.mas_equalTo(-8);
         }];
-        
+    
         [allStopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.mas_equalTo(tableHeaderView);
-            make.centerX.mas_equalTo(tableHeaderView).multipliedBy(1+1/2.0);
-            make.top.equalTo(tableHeaderView).offset(10);
-            make.bottom.equalTo(tableHeaderView).offset(-10);
-            make.width.mas_equalTo(80);
+            make.right.bottom.equalTo(tableHeaderView);
+            make.width.equalTo(tableHeaderView).multipliedBy(0.48);
         }];
     }
     

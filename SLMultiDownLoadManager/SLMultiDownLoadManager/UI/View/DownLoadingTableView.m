@@ -35,7 +35,6 @@
         
         //任务下载完成
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downLoadFinished) name:DownLoadResourceFinished object:nil];
-
     }
     return self;
 }
@@ -180,8 +179,7 @@
 //删除被选中的cell
 -(void)deleteSelectedCells:(deleteSucess)deleteSucess{
     
-    SLog(@"++++++++++===：：%@",_dataArr);
-    
+//    SLog(@"++++++++++===：：%@",_dataArr);
     NSMutableArray *deleteArr = [NSMutableArray arrayWithCapacity:0];
     
     for (SLDownLoadModel *model in _dataArr) {
@@ -198,12 +196,8 @@
             if ([SLFileManager isExistPath:destinationStr]) {
                 [SLFileManager deletePathWithName:destinationStr];
             }
-
-            //要被删除的的cell的model，最后在更新
-            SLog(@"要被删除的---前：：%@",_dataArr);
             
             [deleteArr addObject:model];
-            SLog(@"要被删除的---后：：%@",_dataArr);
         }
     }
     
@@ -212,11 +206,8 @@
     }
     
     [self reloadData];
-    
     //刷新下载任务
     [[SLDownLoadQueue downLoadQueue] updateDownLoad];
-
-    
     //每次批量删除之后要复位
     deleteSucess();
 }
