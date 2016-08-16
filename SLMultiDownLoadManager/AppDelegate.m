@@ -10,7 +10,7 @@
 #import "ViewController.h"
 #import "SLFileManager.h"
 #import "SLDownLoadQueue.h"
-#import "Tools.h"
+#import "DownLoadTools.h"
 
 @interface AppDelegate ()
 
@@ -44,8 +44,8 @@
     //读取下载任务，以及已经下载完成的
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
     
-    //解归档以前已下载完的
-    NSMutableArray *arrTmp = [Tools unArchiveCompleteDownLoadModelWithKey:@"completedDownLoadQueueArr"];
+    //解归档 以前已下载完的
+    NSMutableArray *arrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
     if (arrTmp) {
         for (SLDownLoadModel *model in arrTmp) {
             [queue.completedDownLoadQueueArr addObject:model];

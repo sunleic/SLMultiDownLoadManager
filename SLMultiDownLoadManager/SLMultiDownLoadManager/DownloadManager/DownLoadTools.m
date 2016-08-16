@@ -6,13 +6,14 @@
 //  Copyright © 2016年 sunlei. All rights reserved.
 //
 
-#import "Tools.h"
+#import "DownLoadTools.h"
 #import "SLFileManager.h"
 #import "DownLoadHeader.h"
 
-@implementation Tools
+@implementation DownLoadTools
 
-+ (BOOL)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr{
+//归档
++ (BOOL)archiveDownLoadModelArrWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr andPath:(NSString *)path{
 
     //归档已经下载完的
     NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
@@ -22,14 +23,15 @@
     //SLog(@"%@",self.completedDownLoadQueueArr);
     [archiver finishEncoding];
     
-    BOOL isSucess = [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+    BOOL isSucess = [completeDownLoadData writeToFile:path atomically:YES];
     
     return isSucess;
 }
 
-+ (NSMutableArray *)unArchiveCompleteDownLoadModelWithKey:(NSString *)key{
+//解归档
++ (NSMutableArray *)unArchiveDownLoadModelArrWithKey:(NSString *)key andPath:(NSString *)path{
     //解归档已下载完的
-    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:CompletedDownLoad_Archive];
+    NSData *data2 = [[NSMutableData alloc] initWithContentsOfFile:path];
     NSKeyedUnarchiver *unarchiver2 = [[NSKeyedUnarchiver alloc] initForReadingWithData:data2];
     NSMutableArray *archivingArr = [unarchiver2 decodeObjectForKey:key];
     //SLog(@"%@",archivingArr);

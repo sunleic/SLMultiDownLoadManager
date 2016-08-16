@@ -11,7 +11,7 @@
 #import "DownLoadingTableViewCell.h"
 #import "SLDownLoadQueue.h"
 #import "SLFileManager.h"
-#import "Tools.h"
+#import "DownLoadTools.h"
 
 
 @interface DownLoadingTableView ()
@@ -115,7 +115,7 @@
                 [[SLDownLoadQueue downLoadQueue] pauseWithDownLoadModel:model];
             }
                 break;
-            case DownLoadStateSuspend:
+            case DownLoadStateWaiting:
             {
                 model.downLoadState = DownLoadStatePause;
                 [[SLDownLoadQueue downLoadQueue] updateDownLoad];
@@ -123,7 +123,7 @@
                 break;
             case DownLoadStatePause:
             {
-                model.downLoadState = DownLoadStateSuspend;
+                model.downLoadState = DownLoadStateWaiting;
                 [[SLDownLoadQueue downLoadQueue] updateDownLoad];
             }
                 break;
@@ -172,7 +172,7 @@
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
         
         //将剩下的下载完的的进行归档
-        [Tools archiveCompleteDownLoadModelWithModelArr:_dataArr withKey:@"completedDownLoadQueueArr"];
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
         
         if (self.isDownLoadCompletedTableView == NO) {
             [[SLDownLoadQueue downLoadQueue] updateDownLoad];
@@ -209,8 +209,8 @@
         [_dataArr removeObject:model];
     }
     
-    //将剩下的下载完的的进行归档
-    [Tools archiveCompleteDownLoadModelWithModelArr:_dataArr withKey:@"completedDownLoadQueueArr"];
+    //将剩下的下载完的重行进行归档
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
     
     [self reloadData];
     //刷新下载任务

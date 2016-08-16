@@ -7,12 +7,24 @@
 //
 
 #import "SLDownLoadQueue.h"
-#import "Tools.h"
+#import "DownLoadTools.h"
 #import "SLSessionManager.h"
 #import "SLFileManager.h"
 
+NSString *const DownLoadArchiveKey = @"DownLoadQueueArr";
+NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
+
 @implementation SLDownLoadQueue
 
+
+-(instancetype)init{
+    if (self = [super init]) {
+        //默认同时下载数量为3，不易过多而导致开辟太多线程
+        _maxDownLoadTask = 3;
+    }
+    
+    return self;
+}
 
 +(SLDownLoadQueue *)downLoadQueue{
 
@@ -28,8 +40,7 @@
 -(SLDownLoadModel *)nextDownLoadModel{
     
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
-        if (DownLoadStateSuspend == model.downLoadState) {
-            
+        if (DownLoadStateWaiting == model.downLoadState) {
             return model;
         }
     }
@@ -45,29 +56,9 @@
             i++;
         }
     }
-    
-    switch (i) {
-        case 0:
-        {
-            [self startDownload];
-            [self startDownload];
-            [self startDownload];
-        }
-            break;
-        case 1:
-        {
-            [self startDownload];
-            [self startDownload];
-        }
-            break;
-        case 2:
-        {
-            [self startDownload];
-        }
-            break;
-        default:
-            NSLog(@"正在进行的下载任务已经超过三个了，请稍等😄");
-            break;
+    //新增下载任务
+    for (int m = 0; m < self.maxDownLoadTask - i; m++) {
+        [self startDownload];
     }
 }
 
@@ -80,7 +71,7 @@
         //SLog(@"%p",modelTmp);
         
         modelTmp.downLoadTask = nil;
-        modelTmp.downLoadState = DownLoadStateSuspend;
+        modelTmp.downLoadState = DownLoadStateWaiting;
         
         modelTmp.totalByetes = 0.f;
         modelTmp.downLoadedByetes = 0.f;
@@ -111,9 +102,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:DownLoadResourceFinished object:nil];
     
     //将下载完的的进行归档
-    [Tools archiveCompleteDownLoadModelWithModelArr:self.completedDownLoadQueueArr withKey:@"completedDownLoadQueueArr"];
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:self.completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
 }
-
 
 #pragma mark - 执行下载
 -(void)startDownload{
@@ -158,7 +148,7 @@
         } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
             
             //注意：：：
-            //在此处发送通知，当人下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
+            //在此处发送通知，当下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
             
             //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
@@ -235,7 +225,7 @@
 -(void)resumeWithDownLoadModel:(SLDownLoadModel *)model{
     //如果在暂停状态或者等待下载状态则恢复下载
     if (DownLoadStatePause == model.downLoadState) {
-        model.downLoadState = DownLoadStateSuspend;
+        model.downLoadState = DownLoadStateWaiting;
     }
     [self updateDownLoad];
 }
@@ -244,7 +234,7 @@
     
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
         if (DownLoadStatePause == model.downLoadState) {
-            model.downLoadState = DownLoadStateSuspend;
+            model.downLoadState = DownLoadStateWaiting;
         }
     }
     
@@ -255,13 +245,14 @@
 -(void)pauseWithDownLoadModel:(SLDownLoadModel *)model{
     //如果在下载状态或者等待下载状态则暂停
     NSLog(@"***********暂停************");
-    if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
+    if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateWaiting == model.downLoadState)) {
 
         //取消是异步的
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
             [resumeData writeToFile:cachePath atomically:YES];
         }];
+        //置空，防止归档时出错
         model.downLoadTask = nil;
         //更改状态
         model.downLoadState = DownLoadStatePause;
@@ -274,7 +265,7 @@
 
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
         //如果在下载状态或者等待下载状态则暂停
-        if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateSuspend == model.downLoadState)) {
+        if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateWaiting == model.downLoadState)) {
         
             //取消下载是异步的
             [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
@@ -282,20 +273,15 @@
                 NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
                 [resumeData writeToFile:cachePath atomically:YES];
             }];
-            
+            //置空，防止归档时出错
             model.downLoadTask = nil;
             //更改状态
             model.downLoadState = DownLoadStatePause;
-            SLog(@"取消下载中。。。。。");
+            //SLog(@"取消下载中。。。。。");
         }
     }
     //更新下载
     [self updateDownLoad];
-}
-
--(void)pauseAllWithAPPWillTerminate{
-    
-
 }
 
 #pragma mark - 懒加载
@@ -321,22 +307,10 @@
     sleep(10);
     
     //归档正在下载或等待下载的
-    NSMutableData *downLoadData = [[NSMutableData alloc]init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:downLoadData];
-    [archiver encodeObject:self.downLoadQueueArr forKey:@"downLoadQueueArr"];
-    SLog(@"%@",self.downLoadQueueArr);
-    [archiver finishEncoding];
-    [downLoadData writeToFile:DownLoad_Archive atomically:YES];
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:self.downLoadQueueArr withKey:DownLoadArchiveKey andPath:DownLoad_Archive];
     
     //归档已经下载完的
-    
-    NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
-    NSKeyedArchiver *archiver2 = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
-    
-    [archiver2 encodeObject:self.completedDownLoadQueueArr forKey:@"completedDownLoadQueueArr"];
-    SLog(@"%@",self.completedDownLoadQueueArr);
-    [archiver2 finishEncoding];
-    [completeDownLoadData writeToFile:CompletedDownLoad_Archive atomically:YES];
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:self.completedDownLoadQueueArr withKey:DownLoadArchiveKey andPath:CompletedDownLoad_Archive];
 }
 
 @end

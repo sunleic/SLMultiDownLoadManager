@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Tools : NSObject
+@interface DownLoadTools : NSObject
 
 //归档下载完的model数组
-+ (BOOL)archiveCompleteDownLoadModelWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr;
++ (BOOL)archiveDownLoadModelArrWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr andPath:(NSString *)path;
 
 //返回解归档下载完的model数组
-+ (NSMutableArray *)unArchiveCompleteDownLoadModelWithKey:(NSString *)key;
++ (NSMutableArray *)unArchiveDownLoadModelArrWithKey:(NSString *)key andPath:(NSString *)path;
 
 @end

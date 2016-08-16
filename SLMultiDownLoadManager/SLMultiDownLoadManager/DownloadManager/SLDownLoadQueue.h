@@ -15,6 +15,9 @@
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *downLoadQueueArr;  //装载非下载完成状态的model
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *completedDownLoadQueueArr;  //装载已经下载完成的model
 
+//最大同时下载数量
+@property (nonatomic, assign, readonly) NSInteger maxDownLoadTask;
+
 //添加下载任务到下载队列中
 -(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model;
 

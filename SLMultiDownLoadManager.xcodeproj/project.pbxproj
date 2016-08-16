@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		683E4BBED4D8D94C6BB13492 /* libPods-SLMultiDownLoadManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFFA7ACF2DF17AF30D7E9E82 /* libPods-SLMultiDownLoadManager.a */; };
-		7124D30D1D5C8E170054EC0B /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7124D30C1D5C8E170054EC0B /* Tools.m */; };
+		7124D30D1D5C8E170054EC0B /* DownLoadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7124D30C1D5C8E170054EC0B /* DownLoadTools.m */; };
 		718279111D51DA6D009E5C86 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279101D51DA6D009E5C86 /* main.m */; };
 		718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279131D51DA6D009E5C86 /* AppDelegate.m */; };
 		718279171D51DA6D009E5C86 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 718279161D51DA6D009E5C86 /* ViewController.m */; };
@@ -47,8 +47,8 @@
 
 /* Begin PBXFileReference section */
 		061E4D78E85254152C72C857 /* Pods-SLMultiDownLoadManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLMultiDownLoadManager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SLMultiDownLoadManager/Pods-SLMultiDownLoadManager.debug.xcconfig"; sourceTree = "<group>"; };
-		7124D30B1D5C8E170054EC0B /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
-		7124D30C1D5C8E170054EC0B /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
+		7124D30B1D5C8E170054EC0B /* DownLoadTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadTools.h; sourceTree = "<group>"; };
+		7124D30C1D5C8E170054EC0B /* DownLoadTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadTools.m; sourceTree = "<group>"; };
 		7182790C1D51DA6D009E5C86 /* SLMultiDownLoadManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SLMultiDownLoadManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		718279101D51DA6D009E5C86 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		718279121D51DA6D009E5C86 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -209,8 +209,8 @@
 				71F44F2F1D531F7F00BF6DB0 /* SLFileManager.m */,
 				71F44F301D531F7F00BF6DB0 /* SLSessionManager.h */,
 				71F44F311D531F7F00BF6DB0 /* SLSessionManager.m */,
-				7124D30B1D5C8E170054EC0B /* Tools.h */,
-				7124D30C1D5C8E170054EC0B /* Tools.m */,
+				7124D30B1D5C8E170054EC0B /* DownLoadTools.h */,
+				7124D30C1D5C8E170054EC0B /* DownLoadTools.m */,
 			);
 			path = DownloadManager;
 			sourceTree = "<group>";
@@ -451,7 +451,7 @@
 				71F44F361D531F7F00BF6DB0 /* SLDownLoadModel.m in Sources */,
 				71F44F3F1D531FF400BF6DB0 /* DownLoadingTableView.m in Sources */,
 				718279171D51DA6D009E5C86 /* ViewController.m in Sources */,
-				7124D30D1D5C8E170054EC0B /* Tools.m in Sources */,
+				7124D30D1D5C8E170054EC0B /* DownLoadTools.m in Sources */,
 				71F44F371D531F7F00BF6DB0 /* SLDownLoadQueue.m in Sources */,
 				718279141D51DA6D009E5C86 /* AppDelegate.m in Sources */,
 				718279111D51DA6D009E5C86 /* main.m in Sources */,

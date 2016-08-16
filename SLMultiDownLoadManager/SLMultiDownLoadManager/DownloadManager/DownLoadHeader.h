@@ -10,7 +10,7 @@
 #define DownLoadHeader_h
 
 typedef NS_ENUM(NSInteger, DownLoadState){
-    DownLoadStateSuspend,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
+    DownLoadStateWaiting,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
     DownLoadStatePause,             //下载暂停
     DownLoadStateDownloading,       //下载中
     DownLoadStateDownloadfinished   //下载完成
@@ -29,9 +29,14 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 
 #define FIEL_UUID  [[NSUUID UUID] UUIDString]
 
-//归档路径
+//归档路径，分别为正在下载的归档路径和已经下载完成的归档路径
 #define DownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadArchive"]
 #define CompletedDownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadArchive"]
+
+//正在下载的model进行归档时的key
+extern NSString *const DownLoadArchiveKey;
+//下载完成的model进行归档时的key
+extern NSString *const CompletedDownLoadArchiveKey;
 
 //通知
 //下载完成

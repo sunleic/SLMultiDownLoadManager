@@ -210,7 +210,7 @@
     self.titleLbl.text = _downLoadModel.title;
     if (_downLoadModel.downLoadState == DownLoadStatePause) {
         self.statusLbl.text = @"暂停下载";
-    }else if (_downLoadModel.downLoadState == DownLoadStateSuspend){
+    }else if (_downLoadModel.downLoadState == DownLoadStateWaiting){
         self.statusLbl.text = @"等待下载";
     }else if (_downLoadModel.downLoadState == DownLoadStateDownloadfinished){
         self.statusLbl.text = @"下载完成";
