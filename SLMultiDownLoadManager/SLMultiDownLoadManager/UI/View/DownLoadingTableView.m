@@ -97,7 +97,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     /*
-     DownLoadStateSuspend,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
+     DownLoadStateWaiting,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
      DownLoadStatePause,             //下载暂停
      DownLoadStateDownloading,       //下载中
      DownLoadStateDownloadfinished   //下载完成

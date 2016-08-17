@@ -40,16 +40,22 @@
 
 
 -(void)getDownLoadCache{
-    
     //读取下载任务，以及已经下载完成的
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
-    
     //解归档 以前已下载完的
-    NSMutableArray *arrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
-    if (arrTmp) {
-        for (SLDownLoadModel *model in arrTmp) {
+    NSMutableArray *completeDownLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
+    if (completeDownLoadArrTmp) {
+        for (SLDownLoadModel *model in completeDownLoadArrTmp) {
             [queue.completedDownLoadQueueArr addObject:model];
         }
+    }
+    //解归档 以前没下载完的
+    NSMutableArray *downLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:DownLoadArchiveKey andPath:DownLoad_Archive];
+    if (downLoadArrTmp) {
+        for (SLDownLoadModel *model in downLoadArrTmp) {
+            [queue.downLoadQueueArr addObject:model];
+        }
+        [queue updateDownLoad];
     }
 }
 
@@ -76,7 +82,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     //app被杀死的时候做一些本地处理
-//    [[SLDownLoadQueue downLoadQueue] appViewTerminate];
+    [[SLDownLoadQueue downLoadQueue] appWillTerminate];
 }
 
 @end

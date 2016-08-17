@@ -203,10 +203,11 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
             //此处在下载完成和取消下载的时候都会被调用
             
             //NSLog(@"*********##%@",[[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]]);
-            NSLog(@"下载完成或暂停下载++++++");
+            //NSLog(@"暂停下载++++++");
             
             [weakSelf updateDownLoad];
             if (model.downLoadState == DownLoadStateDownloadfinished) {
+                NSLog(@"下载完成++++++");
                 [weakSelf completedDownLoadWithModel:model];
             }
         }];
@@ -214,11 +215,6 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 
     [model.downLoadTask resume]; //开始下载
     model.downLoadState = DownLoadStateDownloading;
-}
-
-//开始下载或暂停下载
--(void)startOrPauseDownLoadWithModel:(SLDownLoadModel *)model{
-
 }
 
 #pragma mark - 恢复某一下载任务
@@ -242,11 +238,10 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 }
 
 #pragma mark - 暂停下载
+//暂停某个下载任务
 -(void)pauseWithDownLoadModel:(SLDownLoadModel *)model{
     //如果在下载状态或者等待下载状态则暂停
-    NSLog(@"***********暂停************");
     if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateWaiting == model.downLoadState)) {
-
         //取消是异步的
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
@@ -261,27 +256,12 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
     }
 }
 
+//暂停所有的下载任务
 -(void)pauseAll{
 
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
-        //如果在下载状态或者等待下载状态则暂停
-        if ((DownLoadStateDownloading == model.downLoadState)||(DownLoadStateWaiting == model.downLoadState)) {
-        
-            //取消下载是异步的
-            [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-    
-                NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
-                [resumeData writeToFile:cachePath atomically:YES];
-            }];
-            //置空，防止归档时出错
-            model.downLoadTask = nil;
-            //更改状态
-            model.downLoadState = DownLoadStatePause;
-            //SLog(@"取消下载中。。。。。");
-        }
+        [self pauseWithDownLoadModel:model];
     }
-    //更新下载
-    [self updateDownLoad];
 }
 
 #pragma mark - 懒加载
@@ -301,16 +281,27 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 }
 
 -(void)appWillTerminate{
-    SLog(@"app将要被杀死。。。。");
-    [self pauseAll];
+    SLog(@"app将要被杀死。。。。111--%@",[NSThread currentThread]);
+    dispatch_queue_t queue = dispatch_queue_create("queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t group = dispatch_group_create();
+    //将任务异步地添加到group中去执行
+    dispatch_group_async(group,queue,^{
+        [self pauseAll];
+        SLog(@"都取消完毕了。。。。11");
+    });
+    
+    dispatch_group_wait(group,DISPATCH_TIME_FOREVER);
+    SLog(@"都取消完毕了。。。。222");
+    
     //给点时间进行异步暂停所有下载
-    sleep(10);
+//    sleep(30);
     
     //归档正在下载或等待下载的
     [DownLoadTools archiveDownLoadModelArrWithModelArr:self.downLoadQueueArr withKey:DownLoadArchiveKey andPath:DownLoad_Archive];
     
     //归档已经下载完的
-    [DownLoadTools archiveDownLoadModelArrWithModelArr:self.completedDownLoadQueueArr withKey:DownLoadArchiveKey andPath:CompletedDownLoad_Archive];
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:self.completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
+    SLog(@"app将要被杀死。。。。222--%@",[NSThread currentThread]);
 }
 
 @end
