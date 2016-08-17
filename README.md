@@ -12,7 +12,11 @@
 * 暂时没发现😊😊
 
 ### 使用
-* SLDownLoadQueue 
+该下载工具分为两部分：
+* 下载UI部分
+UI的主体是一个ViewController
+* 下载逻辑部分
+DownloadManager
 下载队列管理类，创建该对象要使用downLoadQueue单利方法，具体用法如下
 ```
 //初始化一个下载model
