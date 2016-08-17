@@ -10,3 +10,16 @@
 
 ### 已发现的下载存在的问题
 * 暂时没发现😊😊
+
+### 使用
+* SLDownLoadQueue 
+下载队列管理类，创建该对象要使用downLoadQueue单利方法，具体用法如下
+
+//初始化一个下载model
+SLDownLoadModel *model = [[SLDownLoadModel alloc]init];
+model.fileUUID = [[[NSUUID UUID] UUIDString] stringByAppendingString:[NSString stringWithFormat:@"-%f",[[NSDate date] timeIntervalSince1970]]];
+model.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
+model.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
+
+//将待下载任务的model添加到下载队列中即可
+**[[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model];**
