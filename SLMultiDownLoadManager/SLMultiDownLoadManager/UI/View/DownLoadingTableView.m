@@ -134,6 +134,7 @@
     }
 }
 
+/*
 #pragma mark --删除cell
 //编辑的风格
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,15 +154,16 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //当你删除时
         //NSLog(@"第%lu行被删除了",indexPath.row);
+        SLDownLoadModel *model = _dataArr[indexPath.row];
         
         //删除视频和用于断点续传的缓存文件
-        NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:[_dataArr[indexPath.row] fileUUID]];
+        NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
         
         if ([SLFileManager isExistPath:cachePath]) {
             [SLFileManager deletePathWithName:cachePath];
         }
-        
-        NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",[_dataArr[indexPath.row] fileUUID]]];
+        ///
+        NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
         if ([SLFileManager isExistPath:destinationStr]) {
             [SLFileManager deletePathWithName:destinationStr];
         }
@@ -171,36 +173,37 @@
         //以动画的形式删除指定的cell
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
         
-        //将剩下的下载完的的进行归档
-        [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
         
         if (self.isDownLoadCompletedTableView == NO) {
             [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+        }else{
+            //将剩下的下载完的的进行归档
+            [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
         }
     }
 }
+ */
 
 //删除被选中的cell
 -(void)deleteSelectedCells:(deleteSucess)deleteSucess{
-    
 //    SLog(@"++++++++++===：：%@",_dataArr);
     NSMutableArray *deleteArr = [NSMutableArray arrayWithCapacity:0];
     
     for (SLDownLoadModel *model in _dataArr) {
         if (model.isDelete) {
-            
             //删除视频和用于断点续传的缓存文件
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
-            
             if ([SLFileManager isExistPath:cachePath]) {
                 [SLFileManager deletePathWithName:cachePath];
             }
-            
+            ///
             NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
             if ([SLFileManager isExistPath:destinationStr]) {
                 [SLFileManager deletePathWithName:destinationStr];
             }
-            
+            //想要删除的下载任务取消掉
+            [model.downLoadTask cancel];
+            model.downLoadTask = nil;
             [deleteArr addObject:model];
         }
     }
@@ -209,12 +212,15 @@
         [_dataArr removeObject:model];
     }
     
-    //将剩下的下载完的重行进行归档
-    [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
-    
     [self reloadData];
     //刷新下载任务
     [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+    
+    //对剩下的下载完的任务们重新归档，对于正在下载的在此处不用归档
+    if (self.isDownLoadCompletedTableView == YES) {
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
+    }
+
     //每次批量删除之后要复位
     deleteSucess();
 }

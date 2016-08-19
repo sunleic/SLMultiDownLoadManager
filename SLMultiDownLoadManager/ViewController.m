@@ -77,12 +77,11 @@
     
     SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
     
-    model1.fileUUID = [[[NSUUID UUID] UUIDString] stringByAppendingString:[NSString stringWithFormat:@"-%f",[[NSDate date] timeIntervalSince1970]]];
+    model1.fileUUID = [[NSUUID UUID] UUIDString];
     model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
     model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
     
     [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model1];
-    
 }
 
 - (void)didReceiveMemoryWarning {

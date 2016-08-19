@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 
 #define CACHE_DIR [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define DOWNLOAD_ROOT_DIR  @"VideoDownload"
+#define DOWNLOAD_ROOT_DIR  @"VideoDownloadRoot"
 #define DOWNLOAD_CACHE_DIR @"VideoDownloadCache"
 
 #define FIEL_UUID  [[NSUUID UUID] UUIDString]

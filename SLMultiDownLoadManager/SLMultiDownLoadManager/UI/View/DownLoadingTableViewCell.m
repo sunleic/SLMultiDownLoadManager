@@ -205,7 +205,6 @@
 
 //给cell对应的属性赋值
 -(void)setValueForCell{
-
     //标题
     self.titleLbl.text = _downLoadModel.title;
     if (_downLoadModel.downLoadState == DownLoadStatePause) {

@@ -325,7 +325,7 @@
         
         [_tableViewOne reloadData];
         
-    }else if (1 == index){
+    }else if (1 == index){SLog(@"====");
         
         if (!_tableViewTwo) {
             
@@ -356,7 +356,7 @@
         [self.navigationController setToolbarHidden:YES animated:YES];
         editBtn.selected = NO;
         [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewOne];
+        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
         
         [_tableViewTwo reloadData];
     }

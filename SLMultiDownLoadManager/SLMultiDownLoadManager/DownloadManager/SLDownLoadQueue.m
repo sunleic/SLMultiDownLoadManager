@@ -131,7 +131,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         SLSessionManager *manager = [SLSessionManager sessionManager];
         model.downLoadTask = [manager downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
             
-            //NSLog(@"下载中。。。。。。%lld",downloadProgress.completedUnitCount);
+            NSLog(@"下载中。。。。。。%lld",downloadProgress.completedUnitCount);
             model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
             model.totalByetes = downloadProgress.totalUnitCount; //总大小
             model.downLoadProgress = model.downLoadedByetes/model.totalByetes; //下载百分比进度
@@ -173,7 +173,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:model.downLoadUrlStr]];
         
         model.downLoadTask = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
-            //NSLog(@"下载中___。。。。。。%lld-----共++++%lld",downloadProgress.completedUnitCount,downloadProgress.totalUnitCount);
+            NSLog(@"下载中___。。。。。。%lld-----共++++%lld",downloadProgress.completedUnitCount,downloadProgress.totalUnitCount);
             //NSLog(@"===========%@",[NSThread currentThread]);
             model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
             model.totalByetes = downloadProgress.totalUnitCount; //总大小
