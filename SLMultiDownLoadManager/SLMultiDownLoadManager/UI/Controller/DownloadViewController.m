@@ -325,7 +325,7 @@
         
         [_tableViewOne reloadData];
         
-    }else if (1 == index){SLog(@"====");
+    }else if (1 == index){
         
         if (!_tableViewTwo) {
             

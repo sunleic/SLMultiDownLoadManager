@@ -50,6 +50,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 //刷新下载
 -(void)updateDownLoad{
 
+    //统计当前正在下载任务的个数
     int i = 0;
     for (SLDownLoadModel *model in self.downLoadQueueArr) {
         if (DownLoadStateDownloading == model.downLoadState) {
@@ -109,10 +110,8 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 -(void)startDownload{
     
     SLDownLoadModel *model = [self nextDownLoadModel];
-    
-    if (nil == model) {
-        return;
-    }
+    if (nil == model) return;
+
     __weak typeof(self) weakSelf = self;
     __block NSDate *oldDate = [NSDate date]; //记录上次的数据回传的时间
     __block float  downLoadBytesTmp = 0;     //记录上次数据回传的大小
@@ -138,7 +137,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
             
             NSDate *currentDate = [NSDate date];
             double num = [currentDate timeIntervalSinceDate:oldDate]; //时间差，就是本次block被调用的时间减去上一次该block被调用的时间
-            if ( num >= 1) {
+            if ( num >= 1) { //时间差大于一秒后再更新数据，不然会导致UI上显示的数据变化过快，看着极为不爽
                 model.downLoadSpeed = (model.downLoadedByetes - downLoadBytesTmp)/num;
                 
                 downLoadBytesTmp = model.downLoadedByetes;
@@ -148,7 +147,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
             
             //注意：：：
-            //在此处发送通知，当下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
+            //若在此处发送下载完成的通知，当下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
             
             //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
@@ -157,10 +156,10 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
             
             NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
             return [NSURL fileURLWithPath:destinationStr];
+            
         } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
             //此处在下载完成和取消下载的时候都会被调用
             [weakSelf updateDownLoad];
-            
             //一定要做判断
             if (model.downLoadState == DownLoadStateDownloadfinished) {
                 [weakSelf completedDownLoadWithModel:model];
@@ -189,7 +188,7 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
             
             //注意：：：
-            //在此处发送通知，当人下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
+            //若在此处发送下载完成的通知，当下载任务完成之后，等一会程序会崩溃，这个问题困扰了我好几小时，my god
             
             //此处只会调用一次，当下载完成后调用
             model.downLoadState = DownLoadStateDownloadfinished;
