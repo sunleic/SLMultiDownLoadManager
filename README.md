@@ -1,5 +1,5 @@
 # SLMultiDownLoadManager
-多任务有限制下载数量的下载工具
+异步多任务有限制下载数量的下载框架
 ![效果图](https://github.com/SLPowerCoder/SLMultiDownLoadManager/blob/master/SLMultiDownLoad.gif)
 
 ### 已经解决的问题
