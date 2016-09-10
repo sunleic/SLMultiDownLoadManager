@@ -13,6 +13,7 @@
 
 NSString *const DownLoadArchiveKey = @"DownLoadQueueArr";
 NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
+NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
 @implementation SLDownLoadQueue
 
@@ -67,9 +68,6 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         modelTmp.downLoadSpeed = 0.f;
         modelTmp.downLoadProgress = 0.f;
         
-        modelTmp.isDelete = NO;
-        modelTmp.isEditStatus = NO;
-        
         //SLog(@"%@",modelTmp.fileUUID);
         [self.downLoadQueueArr addObject:modelTmp];
         [self updateDownLoad];
@@ -85,6 +83,19 @@ NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
         model.downLoadTask = nil;
         [self.completedDownLoadQueueArr addObject:model];
         [self.downLoadQueueArr removeObject:model];
+        
+        
+        //描述文件路径
+        NSString *fullPath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
+        //描述文件对应的缓存资源路径
+        NSDictionary *resumeDataDic = [NSDictionary dictionaryWithContentsOfFile:fullPath];
+        //断点续传的描述文件中对应的的资源缓存文件，默认是存放在系统的tmp目录下
+        NSString *resumeDataTmpName = resumeDataDic[@"NSURLSessionResumeInfoTempFileName"];
+        NSString *resumeDataTmpPath = [[SLFileManager getTmpPath] stringByAppendingPathComponent:resumeDataTmpName];
+        //删除对应的资源缓存文件，虽然系统会自动删除，不过我还是想删除
+        [SLFileManager deletePathWithName:resumeDataTmpPath];
+        //移除用于断点续传的文件
+        [SLFileManager deletePathWithName:fullPath];
     }
     
     [self updateDownLoad];

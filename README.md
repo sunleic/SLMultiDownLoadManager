@@ -7,21 +7,22 @@
 * 断点续传
 * 后台下载
 * 处理了人为杀死APP的时候数据的缓存问题
+* 屏蔽掉了无效的缓存，避免了断点续传失效的问题
 
 ### 已发现的下载存在的问题
 * 暂时没发现😊😊
 
 ### 使用
-该下载工具分为两部分：
-* 下载UI部分：<br/>
+该框架工具分为两部分：
+* UI部分（只是一个参考）：<br/>
 UI的主体是一个ViewController
-* 下载逻辑部分：<br/>
+* 下载逻辑部分（可以拿出来单独使用）：<br/>
 DownloadManager
 下载队列管理类，创建该对象要使用downLoadQueue单利方法，具体用法如下
 ```
 //初始化一个下载model
 SLDownLoadModel *model = [[SLDownLoadModel alloc]init];
-model.fileUUID = [[[NSUUID UUID] UUIDString] stringByAppendingString:[NSString stringWithFormat:@"-%f",[[NSDate date] timeIntervalSince1970]]];
+model.resourceID = [[[NSUUID UUID] UUIDString] stringByAppendingString:[NSString stringWithFormat:@"-%f",[[NSDate date] timeIntervalSince1970]]];
 model.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
 model.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
 //将待下载任务的model添加到下载队列中即可

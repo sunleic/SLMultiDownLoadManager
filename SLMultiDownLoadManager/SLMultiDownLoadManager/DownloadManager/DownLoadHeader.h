@@ -35,14 +35,16 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 extern NSString *const DownLoadArchiveKey;
 //下载完成的model进行归档时的key
 extern NSString *const CompletedDownLoadArchiveKey;
+//下载完成的通知
+extern NSString *const DownLoadResourceFinished;
 
-//通知
-//下载完成
-#define DownLoadResourceFinished @"DownLoadResourceFinished"
 //删除下载列表中的cell
 #define CellIsDeleted @"CellIsDeleted"
 
 #import "AFNetworking.h"
 #import "Masonry.h"
+
+#import "DownLoadTools.h"
+#import "SLFileManager.h"
 
 #endif /* DownLoadHeader_h */

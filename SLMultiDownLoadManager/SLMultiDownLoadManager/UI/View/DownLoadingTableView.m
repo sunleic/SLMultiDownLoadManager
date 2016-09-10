@@ -22,6 +22,7 @@
 - (instancetype)initWithFrame:(CGRect)rect style:(UITableViewStyle)tableViewStyle WithDataSource:(NSMutableArray *)dataSource
 {
     self = [super initWithFrame:rect style:tableViewStyle];
+    self.allowsMultipleSelectionDuringEditing = YES;
     if (self) {
         
         if (dataSource) {
@@ -52,7 +53,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 70;
+    return 80;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -76,37 +77,33 @@
         cell.progressLbl.hidden = NO;
         cell.progressView.hidden = NO;
     }
-    
-    [cell.selectBtn addTarget:self action:@selector(deleteBtn:) forControlEvents:UIControlEventTouchUpInside];
-    cell.selectBtn.tag = indexPath.row;
 
     return cell;
 }
 
--(void)deleteBtn:(UIButton *)button{
-    
-    SLDownLoadModel *model = _dataArr[button.tag];
-    if (!model) {
-        return;
-    }
-    model.isDelete = !model.isDelete;
-    [self reloadData];
-}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    /*
-     DownLoadStateWaiting,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
-     DownLoadStatePause,             //下载暂停
-     DownLoadStateDownloading,       //下载中
-     DownLoadStateDownloadfinished   //下载完成
-     */
+    SLDownLoadModel *model = self.dataArr[indexPath.row];
     
-    if (self.isDownLoadCompletedTableView) {
-        NSLog(@"您点击了已经下载完成的第 %lu 行",indexPath.row);
-    }else{
-        SLDownLoadModel *model = [[tableView cellForRowAtIndexPath:indexPath] downLoadModel];
-        [SLDownLoadQueue startOrStopDownloadWithModel:model];
+    if (tableView.editing == YES) {
+        if (![self.deleteDataArr containsObject:model]) {
+            [self.deleteDataArr addObject:model];
+        }
+        return;
+    }
+    
+    [SLDownLoadQueue startOrStopDownloadWithModel:model];
+}
+
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    if (tableView.editing == YES) {
+        SLDownLoadModel *model = self.dataArr[indexPath.row];
+        
+        if ([self.deleteDataArr containsObject:model]) {
+            [self.deleteDataArr removeObject:model];
+        }
     }
 }
 
@@ -166,7 +163,7 @@
     NSMutableArray *deleteArr = [NSMutableArray arrayWithCapacity:0];
     
     for (SLDownLoadModel *model in _dataArr) {
-        if (model.isDelete) {
+//        if (model.isDelete) {
             //删除视频和用于断点续传的缓存文件
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
             if ([SLFileManager isExistPath:cachePath]) {
@@ -182,7 +179,7 @@
             model.downLoadTask = nil;
             [deleteArr addObject:model];
         }
-    }
+//    }
     
     for (SLDownLoadModel *model in deleteArr) {
         [_dataArr removeObject:model];
@@ -199,6 +196,16 @@
 
     //每次批量删除之后要复位
     deleteSucess();
+}
+
+#pragma mark - 懒加载数据源
+-(NSMutableArray *)deleteDataArr{
+
+    if (!_deleteDataArr) {
+        _deleteDataArr = [NSMutableArray arrayWithCapacity:0];
+    }
+    
+    return _deleteDataArr;
 }
 
 -(void)dealloc{

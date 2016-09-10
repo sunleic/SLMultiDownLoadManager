@@ -56,7 +56,7 @@
     UIButton *allSelectedBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
     [allSelectedBtn setTitle:@"全部选中" forState:UIControlStateNormal];
     [allSelectedBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
-    [allSelectedBtn addTarget:self action:@selector(allSelectedAction:) forControlEvents:UIControlEventTouchUpInside];
+    [allSelectedBtn addTarget:self action:@selector(deleteAllAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:allSelectedBtn];
     
     UIBarButtonItem *spaceItem =[ [UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -70,77 +70,71 @@
     self.toolbarItems = @[leftBarButtonItem,spaceItem,deleteBarButtonItem];
 }
 
-#pragma mark - 全部选中或全部不选中
--(void)allSelectedAction:(UIButton *)button{
-    
-    if (button.selected) { //全选中
-        //SLog(@"全部非选中状态");
-        if (_segmentCtl.selectedSegmentIndex == 0) {
-            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
-                model.isDelete = NO;
-            }
-            [_tableViewOne reloadData];
-        }else{
-            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
-                model.isDelete = NO;
-            }
-            [_tableViewTwo reloadData];
-        }
+#pragma mark - 全部删除
+-(void)deleteAllAction:(UIButton *)button{
+    //SLog(@"全部非选中状态");
+    if (_segmentCtl.selectedSegmentIndex == 0) {
         
-    }else{
-        //SLog(@"全部选中状态");
-        if (_segmentCtl.selectedSegmentIndex == 0) {
-            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
-                model.isDelete = YES;
+        for (SLDownLoadModel *model in _tableViewOne.dataArr) {
+            if (model.downLoadTask) {
+                [model.downLoadTask cancel];
             }
-            [_tableViewOne reloadData];
-        }else{
-            for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
-                model.isDelete = YES;
-            }
-            [_tableViewTwo reloadData];
         }
+        [_tableViewOne.dataArr removeAllObjects];
+        _tableViewOne.editing = NO;
+        [_tableViewOne reloadData];
+    }else{
+        [_tableViewTwo.dataArr removeAllObjects];
+        _tableViewTwo.editing = NO;
+        [_tableViewTwo reloadData];
     }
-    button.selected = !button.selected;
 }
 
 #pragma mark - 底部删除按钮
 -(void)deleteAction:(UIButton *)button{
     
-    __weak typeof(self) weakSelf = self;
-    
     if (_segmentCtl.selectedSegmentIndex == 0) {
-        SLog(@"删除");
-        [_tableViewOne deleteSelectedCells:^{
-            //SLog(@"批量删除复位+++");
-            [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewOne];
-            [weakSelf.tableViewOne reloadData];
-            [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-            editBtn.selected = !editBtn.selected;
-        }];
+        
+        for (SLDownLoadModel *model in _tableViewOne.deleteDataArr) {
+            if (model.downLoadTask) {
+                [model.downLoadTask cancel];
+            }
+        }
+        [_tableViewOne.dataArr removeObjectsInArray:_tableViewOne.deleteDataArr];
+        [SLDownLoadQueue updateDownLoad];
+        _tableViewOne.editing = NO;
+        [_tableViewOne reloadData];
     }else{
-
-        [_tableViewTwo deleteSelectedCells:^{
-            //SLog(@"批量删除复位+++");
-            [weakSelf remakeConstrainsToHideSelectedBtnOnTable:weakSelf.tableViewTwo];
-            [weakSelf.tableViewTwo reloadData];
-            [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-            editBtn.selected = !editBtn.selected;
-        }];
+        
+        [_tableViewTwo.dataArr removeObjectsInArray:_tableViewTwo.deleteDataArr];
+        _tableViewTwo.editing = NO;
+        [_tableViewTwo reloadData];
     }
+    
+    [self setToolBarHidden:YES animation:YES];
+    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    //重新归档已经下载完的
+    [DownLoadTools archiveDownLoadModelArrWithModelArr:[SLDownLoadQueue downLoadQueue].completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
 }
 
 #pragma mark - 编辑按钮
 -(void)editAction:(UIButton *)button{
     
-    if (button.selected) {  //执行编辑操作
+    if ([button.currentTitle isEqualToString:@"取消"]) {  //执行编辑操作
         //SLog(@"隐藏cell上的选中按钮");
         [button setTitle:@"编辑" forState:UIControlStateNormal];
         
         if (_segmentCtl.selectedSegmentIndex == 0) {
-            [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewOne];
+            //隐藏toolbar
+            [self setToolBarHidden:YES animation:YES];
+            _tableViewOne.editing = NO;
+            [_tableViewOne reloadData];
+            [_tableViewOne.deleteDataArr removeAllObjects];
         }else{
-            [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
+            [self setToolBarHidden:YES animation:YES];
+            _tableViewTwo.editing = NO;
+            [_tableViewTwo reloadData];
+            [_tableViewTwo.deleteDataArr removeAllObjects];
         }
         
     }else{
@@ -148,33 +142,19 @@
         [button setTitle:@"取消" forState:UIControlStateNormal];
   
         if (_segmentCtl.selectedSegmentIndex == 0) {
-            [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewOne];
+            //显示toolbar
+            [self setToolBarHidden:NO animation:YES];
+            _tableViewOne.editing = YES;
+            [_tableViewOne reloadData];
+            [_tableViewOne.deleteDataArr removeAllObjects];
         }else{
-            [self remakeConstrainsToShowSelectedBtnOnTable:_tableViewTwo];
+            //显示toolbar
+            [self setToolBarHidden:NO animation:YES];
+            _tableViewTwo.editing = YES;
+            [_tableViewTwo reloadData];
+            [_tableViewTwo.deleteDataArr removeAllObjects];
         }
     }
-    button.selected = !button.selected;
-}
-
-//显示批量选择按钮
--(void)remakeConstrainsToShowSelectedBtnOnTable:(UITableView *)table{
-    //显示toolbar
-    [self setToolBarHidden:NO animation:YES];
-    for (SLDownLoadModel *model in [self getAllModelWithTable:table]) {
-        model.isEditStatus = YES;
-    }
-    [table reloadData];
-}
-
-//隐藏批量选择按钮
--(void)remakeConstrainsToHideSelectedBtnOnTable:(UITableView *)table{
-    //隐藏toolbar
-    [self setToolBarHidden:YES animation:YES];
-    for (SLDownLoadModel *model in [self getAllModelWithTable:table]) {
-        model.isEditStatus = NO;
-    }
-    
-    [table reloadData];
 }
 
 //获得指定tableview的可见cell们
@@ -298,30 +278,25 @@
             
             _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
             [self.view addSubview:_tableViewOne];
-            _tableViewTwo.isDownLoadCompletedTableView = NO;
+            _tableViewOne.isDownLoadCompletedTableView = NO;
             //屏幕适配
             [_tableViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
-            //头
             _tableViewOne.tableHeaderView = [self createHeaderViewWithTable:_tableViewOne];
         }
         
+        _tableViewOne.editing = NO;
+        _tableViewOne.hidden = NO;
         if (_tableViewTwo) {
             _tableViewTwo.hidden = YES;
+            _tableViewTwo.editing = NO;
         }
-        _tableViewOne.hidden = NO;
         
-        //为了确保，当某一个tableview正处于编辑状态的时候点击了segmentctl而出现的bug
-        //隐藏toolbar，并将所以的的isDelete=NO;
-        for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] completedDownLoadQueueArr]) {
-            model.isDelete = NO;
-        }
         //toolbar
         [self.navigationController setToolbarHidden:YES animated:YES];
         editBtn.selected = NO;
         [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
         
         [_tableViewOne reloadData];
         
@@ -337,26 +312,17 @@
             [_tableViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(64, 0, 0, 0));
             }];
-            
-            //头
             _tableViewTwo.tableHeaderView = [self createHeaderViewWithTable:_tableViewTwo];
         }
-        if (_tableViewOne) {
-            _tableViewOne.hidden = YES;
-        }
-        _tableViewTwo.hidden = NO;
         
-       
-        //为了确保，当某一个tableview正处于编辑状态的时候点击了segmentctl而出现的bug
-        //隐藏toolbar，并将所以的的isDelete=NO;
-        for (SLDownLoadModel *model in [[SLDownLoadQueue downLoadQueue] downLoadQueueArr]) {
-            model.isDelete = NO;
-        }
-        //toolbar
+        _tableViewOne.hidden = YES;
+        _tableViewOne.editing = NO;
+        _tableViewTwo.hidden = NO;
+        _tableViewTwo.editing = NO;
+  
         [self.navigationController setToolbarHidden:YES animated:YES];
         editBtn.selected = NO;
         [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-        [self remakeConstrainsToHideSelectedBtnOnTable:_tableViewTwo];
         
         [_tableViewTwo reloadData];
     }

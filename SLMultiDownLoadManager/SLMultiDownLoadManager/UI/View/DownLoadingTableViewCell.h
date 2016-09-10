@@ -20,6 +20,6 @@
 @property (nonatomic, strong) UILabel        *statusLbl;
 @property (nonatomic, strong) UILabel        *progressLbl;
 @property (nonatomic, strong) UIProgressView *progressView;
-@property (nonatomic, strong) UIButton       *selectBtn;
+//@property (nonatomic, strong) UIButton       *selectBtn;
 
 @end

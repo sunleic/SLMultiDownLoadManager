@@ -14,14 +14,13 @@ typedef void(^deleteSucess)();
 
 @property (nonatomic, strong) NSMutableArray *dataArr; //数据源
 
-@property (nonatomic, assign) BOOL isDownLoadCompletedTableView; //表示是否是下载完成的table
+@property (nonatomic, strong) NSMutableArray *deleteDataArr; //要被删除的数据
 
-@property (nonatomic, copy) void(^deleteSucess)(); //批量删除成功回调
+@property (nonatomic, assign) BOOL isDownLoadCompletedTableView; //表示是否是下载完成的table
 
 
 - (instancetype)initWithFrame:(CGRect)rect style:(UITableViewStyle)tableViewStyle WithDataSource:(NSMutableArray *)dataSource;
 
-//删除被选中的cell
--(void)deleteSelectedCells:(deleteSucess)deleteSucess;
+
 
 @end
