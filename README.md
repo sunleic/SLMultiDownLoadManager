@@ -1,6 +1,6 @@
 # SLMultiDownLoadManager
 多任务有限制下载数量的下载工具
-![效果图](https://github.com/SLPowerCoder/SLMultiDownLoadManager/blob/master/SLMultiDownLoadManager/SLMultiDownLoad.gif)
+![效果图](https://github.com/SLPowerCoder/SLMultiDownLoadManager/blob/master/SLMultiDownLoad.gif)
 
 ### 已经解决的问题
 * 限制同时下载任务的最大数量
