@@ -77,7 +77,7 @@
     
     SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
     
-    model1.fileUUID = [[NSUUID UUID] UUIDString];
+    model1.resourceID = [[NSUUID UUID] UUIDString];
     model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
     model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
     

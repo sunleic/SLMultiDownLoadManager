@@ -13,7 +13,6 @@
 #import "SLFileManager.h"
 #import "DownLoadTools.h"
 
-
 @interface DownLoadingTableView ()
 
 @end
@@ -106,31 +105,8 @@
     if (self.isDownLoadCompletedTableView) {
         NSLog(@"您点击了已经下载完成的第 %lu 行",indexPath.row);
     }else{
-    
         SLDownLoadModel *model = [[tableView cellForRowAtIndexPath:indexPath] downLoadModel];
-        
-        switch (model.downLoadState) {
-            case DownLoadStateDownloading:
-            {
-                [[SLDownLoadQueue downLoadQueue] pauseWithDownLoadModel:model];
-            }
-                break;
-            case DownLoadStateWaiting:
-            {
-                model.downLoadState = DownLoadStatePause;
-                [[SLDownLoadQueue downLoadQueue] updateDownLoad];
-            }
-                break;
-            case DownLoadStatePause:
-            {
-                model.downLoadState = DownLoadStateWaiting;
-                [[SLDownLoadQueue downLoadQueue] updateDownLoad];
-            }
-                break;
-                
-            default:
-                break;
-        }
+        [SLDownLoadQueue startOrStopDownloadWithModel:model];
     }
 }
 
@@ -192,12 +168,12 @@
     for (SLDownLoadModel *model in _dataArr) {
         if (model.isDelete) {
             //删除视频和用于断点续传的缓存文件
-            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.fileUUID];
+            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
             if ([SLFileManager isExistPath:cachePath]) {
                 [SLFileManager deletePathWithName:cachePath];
             }
             ///
-            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.fileUUID]];
+            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.resourceID]];
             if ([SLFileManager isExistPath:destinationStr]) {
                 [SLFileManager deletePathWithName:destinationStr];
             }
@@ -214,7 +190,7 @@
     
     [self reloadData];
     //刷新下载任务
-    [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+    [SLDownLoadQueue updateDownLoad];
     
     //对剩下的下载完的任务们重新归档，对于正在下载的在此处不用归档
     if (self.isDownLoadCompletedTableView == YES) {

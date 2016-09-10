@@ -11,10 +11,15 @@
 
 @implementation SLFileManager
 
-//获取下载资源的根目录
+/**
+*  获取下载资源的根目录，该目录存放已经下载好的资源，/Library/Caches/VideoDownloadRoot
+*
+*  @return 返回下载资源的根目录
+*/
 +(NSString *)getDownloadRootDir{
     
-    NSString *cacheDir = CACHE_DIR;
+    NSString *cacheDir = [SLFileManager getLiarbryCachesPath];
+;
     NSString *path = [cacheDir stringByAppendingPathComponent:DOWNLOAD_ROOT_DIR];
     
     if (![SLFileManager isExistPath:path]) {
@@ -29,10 +34,15 @@
     return path;
 }
 
-//获取下载资源的缓存目录
+/**
+ *  获取下载资源的缓存目录，该目录的内容包括用于断点续传的resumeData文件和归档的文件，/Library/Caches/VideoDownloadCache
+ *
+ *  @return 返回下载资源的缓存目录
+ */
 +(NSString *)getDownloadCacheDir{
     
-    NSString *cacheDir = CACHE_DIR;
+    NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+;
     NSString *path = [cacheDir stringByAppendingPathComponent:DOWNLOAD_CACHE_DIR];
     
     if (![SLFileManager isExistPath:path]) {
@@ -46,59 +56,35 @@
     return path;
 }
 
-//在下载资源根目录是否存在指定的文件
-+(BOOL)isExistDownloadRootDir{
-    NSString *cacheDir = CACHE_DIR;
-    
-    NSString *downLoadPath = [cacheDir stringByAppendingPathComponent:DOWNLOAD_ROOT_DIR];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    //NSCachesDirectory 中是否存在pathName
-    if ([fileManager fileExistsAtPath:downLoadPath]) {
-        
-        return YES;
-    }else{
-        
-        return NO;
-    }
-}
-
-
-//是否存在指定的文件或目录
+/**
+ *  是否存在指定的文件或目录
+ *
+ *  @param pathStr 自定的文件路径或目录路径
+ *
+ *  @return YES 表示存在指定的路径 NO 表示不存在
+ */
 +(BOOL)isExistPath:(NSString *)pathStr{
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     //NSCachesDirectory 中是否存在pathName
     if ([fileManager fileExistsAtPath:pathStr]) {
-        
         return YES;
     }else{
-        
         return NO;
     }
 }
 
-//创建下载资源的根目录
-+(BOOL)createDownloadRootDir{
-    
-    NSString *downLoadDir = [SLFileManager getDownloadRootDir];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *err = nil;
-    [fileManager createDirectoryAtPath:downLoadDir withIntermediateDirectories:YES attributes:nil error:&err];
-    if (!err) {
-        return YES;
-    }else{
-        NSLog(@"%@",err.localizedDescription);
-        return NO;
-    }
-}
-
-//创建一个指定的的目录
+/**
+ *  创建一个指定的的目录
+ *
+ *  @param path 创建一个指定的的目录
+ *
+ *  @return YES创建成功
+ */
 +(BOOL)createPath:(NSString *)path{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     //NSCachesDirectory 中是否存在pathName
     if ([fileManager fileExistsAtPath:path]) {
-        
         return YES;
     }else{
         NSError *err = nil;
@@ -112,7 +98,14 @@
     }
 }
 
-//删除制定路径的文件或目录
+
+/**
+ *  删除制定路径的文件或目录
+ *
+ *  @param pathName 文件名或目录名
+ *
+ *  @return 删除成功为YES 失败为NO
+ */
 +(BOOL)deletePathWithName:(NSString *)pathName{
     
     if (pathName == nil) {
@@ -121,17 +114,86 @@
     }
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     NSError *err = nil;
     [fileManager removeItemAtPath:pathName error:&err];
     if (!err) {
-        
         return YES;
     }else{
-        
         NSLog(@"%@",err.localizedDescription);
         return NO;
     }
+}
+
+/**
+ *  将sourcePath路径的文件或文件夹移动到destinationPath路径中
+ *
+ *  @param sourcePath      源路径
+ *  @param destinationPath 目的路径
+ *
+ *  @return 移动成功返回YES
+ */
++(BOOL)moveItemPath:(NSString *)sourcePath toItemPath:(NSString *)destinationPath{
+    
+    NSError *err = nil;
+    BOOL isSucess = [[NSFileManager defaultManager] moveItemAtPath:sourcePath toPath:destinationPath error:&err];
+    
+    if (!err && isSucess) {
+        return YES;
+    }else{
+        NSLog(@"%@",err.localizedDescription);
+        return NO;
+    }
+}
+
+/**
+ *  返回沙河目录
+ *
+ *  @return 返回沙河目录
+ */
++(NSString *)getHomeDictionary{
+ 
+    return NSHomeDirectory();
+}
+
+/**
+ *  获取系统Documents路径
+ *
+ *  @return 返回系统Documents路径
+ */
++(NSString *)getDocumentsPath{
+    
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+
+/**
+ *  获取系统Liarbry路径
+ *
+ *  @return 返回系统Liarbry路径
+ */
++(NSString *)getLiarbryPath{
+    
+    return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+/**
+ *  返回Liarbry/Caches目录
+ *
+ *  @return 返回Liarbry/Caches目录
+ */
++(NSString *)getLiarbryCachesPath{
+
+    return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+/**
+ *  获取系统tmp缓存路径
+ *
+ *  @return 返回系统缓tmp存路径
+ */
++(NSString *)getTmpPath{
+    [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    return [[SLFileManager getHomeDictionary] stringByAppendingPathComponent:@"tmp"];
 }
 
 @end

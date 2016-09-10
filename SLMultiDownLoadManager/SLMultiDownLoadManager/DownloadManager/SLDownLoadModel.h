@@ -15,8 +15,11 @@
 @property (nonatomic, strong)   NSURLSessionDownloadTask *downLoadTask;  //当前资源下载任务
 @property (nonatomic, assign)   DownLoadState downLoadState;             //当前下载状态
 
-@property (nonatomic, copy)     NSString *fileUUID;             //生成的UUID作为文件名
+//下载资源的唯一标示符，作为resumedata描述文件的名字
+//下载后资源的名字（对于视频的命名是resourceID.mp4）
+@property (nonatomic, copy)     NSString *resourceID;
 @property (nonatomic, copy)     NSString *title;                //下载资源的标题
+@property (nonatomic, copy)     NSString *thumbnailUrlStr;      //对应资源的缩略图
 @property (nonatomic, copy)     NSString *downLoadUrlStr;       //下载资源的URL
 
 @property (nonatomic, assign)   float     totalByetes;          //下载资源的总大小

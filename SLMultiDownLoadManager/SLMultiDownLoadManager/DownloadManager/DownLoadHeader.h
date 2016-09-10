@@ -22,8 +22,6 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 #define SCREEN_W [UIScreen mainScreen].bounds.size.width
 #define SCREEN_H [UIScreen mainScreen].bounds.size.height
 
-#define CACHE_DIR [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
-
 #define DOWNLOAD_ROOT_DIR  @"VideoDownloadRoot"
 #define DOWNLOAD_CACHE_DIR @"VideoDownloadCache"
 

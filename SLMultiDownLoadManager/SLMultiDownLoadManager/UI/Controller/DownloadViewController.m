@@ -273,13 +273,13 @@
 //全部开始下载
 -(void)allStartAction:(UIButton *)button{
     //SLog(@"全部开始下载");
-    [[SLDownLoadQueue downLoadQueue] startDownloadAll];
+    [SLDownLoadQueue startDownloadAll];
 }
 
 //全部暂停下载
 -(void)allStopAction:(UIButton *)button{
     //SLog(@"全部暂停下载");
-    [[SLDownLoadQueue downLoadQueue] pauseAll];
+    [SLDownLoadQueue pauseAll];
 }
 
 //点击观看全部

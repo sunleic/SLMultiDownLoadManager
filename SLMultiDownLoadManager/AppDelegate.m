@@ -33,30 +33,9 @@
     NSLog(@"%@",NSHomeDirectory());
     
     //获取缓存
-    [self getDownLoadCache];
+    [SLDownLoadQueue getDownLoadCache];
     
     return YES;
-}
-
-
--(void)getDownLoadCache{
-    //读取下载任务，以及已经下载完成的
-    SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
-    //解归档 以前已下载完的
-    NSMutableArray *completeDownLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
-    if (completeDownLoadArrTmp) {
-        for (SLDownLoadModel *model in completeDownLoadArrTmp) {
-            [queue.completedDownLoadQueueArr addObject:model];
-        }
-    }
-    //解归档 以前没下载完的
-    NSMutableArray *downLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:DownLoadArchiveKey andPath:DownLoad_Archive];
-    if (downLoadArrTmp) {
-        for (SLDownLoadModel *model in downLoadArrTmp) {
-            [queue.downLoadQueueArr addObject:model];
-        }
-        [queue updateDownLoad];
-    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -72,7 +51,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     //将要进入前台的时候刷新一下，防止下载停止，虽然他们的状态是正在下载或待下载状态
-    [[SLDownLoadQueue downLoadQueue] updateDownLoad];
+    [SLDownLoadQueue updateDownLoad];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -82,7 +61,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     //app被杀死的时候做一些本地处理
-    [[SLDownLoadQueue downLoadQueue] appWillTerminate];
+    [SLDownLoadQueue appWillTerminate];
 }
 
 @end
