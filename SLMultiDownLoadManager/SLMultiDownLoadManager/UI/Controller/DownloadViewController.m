@@ -54,7 +54,7 @@
     [self.navigationController setToolbarHidden:hidden animated:animate];
     
     UIButton *allSelectedBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
-    [allSelectedBtn setTitle:@"全部选中" forState:UIControlStateNormal];
+    [allSelectedBtn setTitle:@"全部删除" forState:UIControlStateNormal];
     [allSelectedBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
     [allSelectedBtn addTarget:self action:@selector(deleteAllAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:allSelectedBtn];
