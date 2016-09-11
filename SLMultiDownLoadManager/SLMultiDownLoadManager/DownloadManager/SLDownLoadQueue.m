@@ -96,6 +96,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     
     //将已经下载完成的任务添加到下载完成数据源
     if ([self.downLoadQueueArr containsObject:model]) {
+        
         //需要把此属性置空才能归档
         [model.downLoadTask cancel];
         model.downLoadTask = nil;
@@ -109,13 +110,20 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         //断点续传的描述文件中对应的的资源缓存文件，默认是存放在系统的tmp目录下
         NSString *resumeDataTmpName = resumeDataDic[@"NSURLSessionResumeInfoTempFileName"];
         NSString *resumeDataTmpPath = [[SLFileManager getTmpPath] stringByAppendingPathComponent:resumeDataTmpName];
+        
         //删除对应的资源缓存文件，虽然系统会自动删除，不过我还是想删除
-        [SLFileManager deletePathWithName:resumeDataTmpPath];
+        if ([SLFileManager isExistPath:resumeDataTmpPath] && resumeDataTmpName.length != 0) {
+            [SLFileManager deletePathWithName:resumeDataTmpPath];
+        }
+        
         //移除用于断点续传的文件
-        [SLFileManager deletePathWithName:fullPath];
+        if ([SLFileManager isExistPath:fullPath] && (model.resourceID.length != 0)) {
+            [SLFileManager deletePathWithName:fullPath];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:DownLoadResourceFinished object:nil];
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:DownLoadResourceFinished object:nil];
+
     //为保险起见每下载一次就要进行归档
     [DownLoadTools archiveDownLoadModelArrWithModelArr:self.completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
     
@@ -311,6 +319,50 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
 #pragma mark - 工具接口API
 
+//添加一个下载
++(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
+    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model];
+}
+
+/*
+ DownLoadStateWaiting,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
+ DownLoadStatePause,             //下载暂停
+ DownLoadStateDownloading,       //下载中
+ DownLoadStateDownloadfinished   //下载完成
+ */
+
+//删除一个下载
++(void)deleteDownLoadWithModel:(SLDownLoadModel *)model{
+    
+    SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
+    if (model.downLoadState == DownLoadStateDownloadfinished) {
+        
+        NSString *videoName = [NSString stringWithFormat:@"%@.mp4",model.resourceID];
+        NSString *videoPath = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:videoName];
+        [SLFileManager deletePathWithName:videoPath];
+        
+        [queue.completedDownLoadQueueArr removeObject:model];
+        //归档已经下载完的
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:queue.completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
+    }else{
+        
+        if (model.downLoadState == DownLoadStateDownloading) {
+            if (model.downLoadTask) {
+                [model.downLoadTask cancel];
+            }
+        }
+        
+        NSString *resumeDataName = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
+        
+        if ([SLFileManager isExistPath:resumeDataName] && (model.resourceID.length != 0)) {
+            [SLFileManager deletePathWithName:resumeDataName];
+        }
+        [queue.downLoadQueueArr removeObject:model];
+        
+        [queue updateDownLoad];
+    }
+}
+
 //开始或暂停下载
 +(void)startOrStopDownloadWithModel:(SLDownLoadModel *)model{
     
@@ -372,27 +424,32 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     [queue.completedDownLoadQueueArr removeAllObjects];
     [queue.downLoadQueueArr removeAllObjects];
     
-    //解归档 以前已下载完的
-    NSMutableArray *completeDownLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
-    if (completeDownLoadArrTmp) {
-        
-        for (SLDownLoadModel *model in completeDownLoadArrTmp) {
-            NSString *path = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.resourceID]];
-            if ([SLFileManager isExistPath:path]) {
-                [queue.completedDownLoadQueueArr addObject:model];
+    if ([SLFileManager isExistPath:CompletedDownLoad_Archive_Path]) {
+        //解归档 以前已下载完的
+        NSMutableArray *completeDownLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
+        if (completeDownLoadArrTmp) {
+            
+            for (SLDownLoadModel *model in completeDownLoadArrTmp) {
+                NSString *path = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.resourceID]];
+                if ([SLFileManager isExistPath:path]) {
+                    [queue.completedDownLoadQueueArr addObject:model];
+                }
             }
         }
     }
-    //解归档 以前没下载完的
-    NSMutableArray *downLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:DownLoadArchiveKey andPath:DownLoad_Archive_Path];
-    if (downLoadArrTmp) {
-        
-        for (SLDownLoadModel *model in downLoadArrTmp) {
-            [queue.downLoadQueueArr addObject:model];
+    
+    if ([SLFileManager isExistPath:DownLoad_Archive_Path]) {
+        //解归档 以前没下载完的
+        NSMutableArray *downLoadArrTmp = [DownLoadTools unArchiveDownLoadModelArrWithKey:DownLoadArchiveKey andPath:DownLoad_Archive_Path];
+        if (downLoadArrTmp) {
+            
+            for (SLDownLoadModel *model in downLoadArrTmp) {
+                [queue.downLoadQueueArr addObject:model];
+            }
         }
+        //读完之后删除
+        [SLFileManager  deletePathWithName:DownLoad_Archive_Path];
     }
-    //读完之后删除
-    [SLFileManager  deletePathWithName:DownLoad_Archive_Path];
 }
 
 +(void)appWillTerminate{

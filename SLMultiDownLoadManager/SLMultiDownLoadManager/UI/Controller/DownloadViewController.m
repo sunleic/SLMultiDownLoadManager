@@ -107,26 +107,23 @@
     if (_segmentCtl.selectedSegmentIndex == 0) {
         
         for (SLDownLoadModel *model in _tableViewOne.deleteDataArr) {
-            if (model.downLoadTask) {
-                [model.downLoadTask cancel];
-            }
+            
+            [SLDownLoadQueue deleteDownLoadWithModel:model];
         }
-        [_tableViewOne.dataArr removeObjectsInArray:_tableViewOne.deleteDataArr];
         [_tableViewOne.deleteDataArr removeAllObjects];
         _tableViewOne.editing = NO;
         [_tableViewOne reloadData];
         
-        [SLDownLoadQueue updateDownLoad];
-        
     }else{
         
-        [_tableViewTwo.dataArr removeObjectsInArray:_tableViewTwo.deleteDataArr];
+        for (SLDownLoadModel *model in _tableViewTwo.deleteDataArr) {
+            [SLDownLoadQueue deleteDownLoadWithModel:model];
+        }
+        
         [_tableViewTwo.deleteDataArr removeAllObjects];
         _tableViewTwo.editing = NO;
         [_tableViewTwo reloadData];
         
-        //重新归档已经下载完的
-        [DownLoadTools archiveDownLoadModelArrWithModelArr:_tableViewTwo.dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
     }
     
     [self setToolBarHidden:YES animation:YES];

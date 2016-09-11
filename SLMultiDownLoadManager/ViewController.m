@@ -57,16 +57,14 @@
 //此处只是为了测试临时添加的下载任务
 -(void)createDownloadTask{
     
-    
     SLDownLoadModel *model1 = [[SLDownLoadModel alloc]init];
     
     model1.resourceID = [[[NSUUID UUID] UUIDString] stringByAppendingString:[NSString stringWithFormat:@"%@",[NSDate date]]];
     model1.downLoadUrlStr = @"http://static.tripbe.com/videofiles/20121214/9533522808.f4v.mp4";
     model1.thumbnailUrlStr = @"";
-    model1.title = @"阿斯顿发送到阿斯顿发送到阿斯顿发送到阿斯顿发送到";
+    model1.title = model1.resourceID;
     
-    
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model1];
+    [SLDownLoadQueue addDownTaskWithDownLoadModel:model1];
 }
 
 - (void)didReceiveMemoryWarning {
