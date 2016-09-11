@@ -28,8 +28,8 @@ typedef NS_ENUM(NSInteger, DownLoadState){
 #define FIEL_UUID  [[NSUUID UUID] UUIDString]
 
 //归档路径，分别为正在下载的归档路径和已经下载完成的归档路径
-#define DownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadArchive"]
-#define CompletedDownLoad_Archive [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadArchive"]
+#define DownLoad_Archive_Path [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"downLoadArchive"]
+#define CompletedDownLoad_Archive_Path [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:@"completedDownLoadArchive"]
 
 //正在下载的model进行归档时的key
 extern NSString *const DownLoadArchiveKey;

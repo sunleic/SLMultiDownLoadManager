@@ -70,7 +70,7 @@
     self.toolbarItems = @[leftBarButtonItem,spaceItem,deleteBarButtonItem];
 }
 
-#pragma mark - 全部删除
+#pragma mark - 删除
 -(void)deleteAllAction:(UIButton *)button{
     //SLog(@"全部非选中状态");
     if (_segmentCtl.selectedSegmentIndex == 0) {
@@ -81,16 +81,27 @@
             }
         }
         [_tableViewOne.dataArr removeAllObjects];
+        [_tableViewOne.deleteDataArr removeAllObjects];
         _tableViewOne.editing = NO;
         [_tableViewOne reloadData];
+        
+        [SLDownLoadQueue updateDownLoad];
+        
     }else{
+        
         [_tableViewTwo.dataArr removeAllObjects];
+        [_tableViewTwo.deleteDataArr removeAllObjects];
         _tableViewTwo.editing = NO;
         [_tableViewTwo reloadData];
+        
+        //重新归档已经下载完的
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:_tableViewTwo.dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
     }
+    [self setToolBarHidden:YES animation:YES];
+    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
 }
 
-#pragma mark - 底部删除按钮
+#pragma mark - 底部右边删除按钮
 -(void)deleteAction:(UIButton *)button{
     
     if (_segmentCtl.selectedSegmentIndex == 0) {
@@ -101,20 +112,25 @@
             }
         }
         [_tableViewOne.dataArr removeObjectsInArray:_tableViewOne.deleteDataArr];
-        [SLDownLoadQueue updateDownLoad];
+        [_tableViewOne.deleteDataArr removeAllObjects];
         _tableViewOne.editing = NO;
         [_tableViewOne reloadData];
+        
+        [SLDownLoadQueue updateDownLoad];
+        
     }else{
         
         [_tableViewTwo.dataArr removeObjectsInArray:_tableViewTwo.deleteDataArr];
+        [_tableViewTwo.deleteDataArr removeAllObjects];
         _tableViewTwo.editing = NO;
         [_tableViewTwo reloadData];
+        
+        //重新归档已经下载完的
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:_tableViewTwo.dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
     }
     
     [self setToolBarHidden:YES animation:YES];
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-    //重新归档已经下载完的
-    [DownLoadTools archiveDownLoadModelArrWithModelArr:[SLDownLoadQueue downLoadQueue].completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
 }
 
 #pragma mark - 编辑按钮
@@ -180,7 +196,7 @@
     self.navigationItem.titleView = _segmentCtl;
     
     if (!_tableViewOne) {
-        _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
+        _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain andStyle:DownLoadTableViewStyleDowloading];
         _tableViewOne.isDownLoadCompletedTableView = NO;
         [self.view addSubview:_tableViewOne];
         //屏幕适配
@@ -276,7 +292,7 @@
         
         if (!_tableViewOne) {
             
-            _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].downLoadQueueArr];
+            _tableViewOne = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain andStyle:DownLoadTableViewStyleDowloading];
             [self.view addSubview:_tableViewOne];
             _tableViewOne.isDownLoadCompletedTableView = NO;
             //屏幕适配
@@ -304,7 +320,7 @@
         
         if (!_tableViewTwo) {
             
-            _tableViewTwo = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain WithDataSource:[SLDownLoadQueue downLoadQueue].completedDownLoadQueueArr];
+            _tableViewTwo = [[DownLoadingTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain andStyle:DownLoadTableViewStyleCompleted];
             [self.view addSubview:_tableViewTwo];
             _tableViewTwo.isDownLoadCompletedTableView = YES;
             

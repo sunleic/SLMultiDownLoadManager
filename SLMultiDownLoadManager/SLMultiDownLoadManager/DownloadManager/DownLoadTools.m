@@ -16,14 +16,14 @@
 + (BOOL)archiveDownLoadModelArrWithModelArr:(NSMutableArray *)arr withKey:(NSString *)keyStr andPath:(NSString *)path{
 
     //归档已经下载完的
-    NSMutableData *completeDownLoadData = [[NSMutableData alloc]init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:completeDownLoadData];
+    NSMutableData *data = [[NSMutableData alloc]init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:data];
     
     [archiver encodeObject:arr forKey:keyStr];
     //SLog(@"%@",self.completedDownLoadQueueArr);
     [archiver finishEncoding];
     
-    BOOL isSucess = [completeDownLoadData writeToFile:path atomically:YES];
+    BOOL isSucess = [data writeToFile:path atomically:YES];
     
     return isSucess;
 }

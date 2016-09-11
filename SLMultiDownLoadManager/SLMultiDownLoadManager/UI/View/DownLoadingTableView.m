@@ -19,16 +19,16 @@
 
 @implementation DownLoadingTableView
 
-- (instancetype)initWithFrame:(CGRect)rect style:(UITableViewStyle)tableViewStyle WithDataSource:(NSMutableArray *)dataSource
-{
-    self = [super initWithFrame:rect style:tableViewStyle];
+- (instancetype)initWithFrame:(CGRect)rect style:(UITableViewStyle)tableViewStyle andStyle:(DownLoadTableViewStyle)DownLoadTableViewStyle{
+    
     self.allowsMultipleSelectionDuringEditing = YES;
-    if (self) {
-        
-        if (dataSource) {
-            self.dataArr = dataSource;
-        }else{
-            self.dataArr = [NSMutableArray arrayWithCapacity:0];
+    
+    if (self = [super initWithFrame:rect style:tableViewStyle]) {
+       
+        if (DownLoadTableViewStyle == DownLoadTableViewStyleDowloading){
+            self.dataArr = [SLDownLoadQueue downLoadQueue].downLoadQueueArr;
+        }else if (DownLoadTableViewStyle == DownLoadTableViewStyleCompleted){
+            self.dataArr = [SLDownLoadQueue downLoadQueue].completedDownLoadQueueArr;
         }
         
         self.dataSource = self;
@@ -85,14 +85,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     SLDownLoadModel *model = self.dataArr[indexPath.row];
-    
+    NSLog(@"---=====%@",model);
     if (tableView.editing == YES) {
         if (![self.deleteDataArr containsObject:model]) {
             [self.deleteDataArr addObject:model];
         }
         return;
     }
-    
+//    model.downLoadTask.taskIdentifier = 4;
     [SLDownLoadQueue startOrStopDownloadWithModel:model];
 }
 
@@ -156,47 +156,6 @@
     }
 }
  */
-
-//删除被选中的cell
--(void)deleteSelectedCells:(deleteSucess)deleteSucess{
-//    SLog(@"++++++++++===：：%@",_dataArr);
-    NSMutableArray *deleteArr = [NSMutableArray arrayWithCapacity:0];
-    
-    for (SLDownLoadModel *model in _dataArr) {
-//        if (model.isDelete) {
-            //删除视频和用于断点续传的缓存文件
-            NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
-            if ([SLFileManager isExistPath:cachePath]) {
-                [SLFileManager deletePathWithName:cachePath];
-            }
-            ///
-            NSString *destinationStr = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4",model.resourceID]];
-            if ([SLFileManager isExistPath:destinationStr]) {
-                [SLFileManager deletePathWithName:destinationStr];
-            }
-            //想要删除的下载任务取消掉
-            [model.downLoadTask cancel];
-            model.downLoadTask = nil;
-            [deleteArr addObject:model];
-        }
-//    }
-    
-    for (SLDownLoadModel *model in deleteArr) {
-        [_dataArr removeObject:model];
-    }
-    
-    [self reloadData];
-    //刷新下载任务
-    [SLDownLoadQueue updateDownLoad];
-    
-    //对剩下的下载完的任务们重新归档，对于正在下载的在此处不用归档
-    if (self.isDownLoadCompletedTableView == YES) {
-        [DownLoadTools archiveDownLoadModelArrWithModelArr:_dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive];
-    }
-
-    //每次批量删除之后要复位
-    deleteSucess();
-}
 
 #pragma mark - 懒加载数据源
 -(NSMutableArray *)deleteDataArr{
