@@ -57,6 +57,8 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 -(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
     //SLog(@"%p",model);
     
+    
+    
     if (![self.downLoadQueueArr containsObject:model] && ![self.completedDownLoadQueueArr containsObject:model] && model) {
         
         for (SLDownLoadModel *modelTmp in self.downLoadQueueArr) {
@@ -190,8 +192,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         return;
     }
     
-    SLSessionManager *manager = [SLSessionManager sessionManager];
-    model.downLoadTask = [manager downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
+    model.downLoadTask = [self.sessionManager  downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
         
         NSLog(@"下载中。。。。。。%lld",downloadProgress.completedUnitCount);
         model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
@@ -239,10 +240,10 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     __block NSDate *oldDate = [NSDate date]; //记录上次的数据回传的时间
     __block float  downLoadBytesTmp = 0;     //记录上次数据回传的大小
 
-    SLSessionManager *manager = [SLSessionManager sessionManager];
+
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:model.downLoadUrlStr]];
     
-    model.downLoadTask = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+    model.downLoadTask = [self.sessionManager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"下载中___。。。。。。%lld-----共++++%lld",downloadProgress.completedUnitCount,downloadProgress.totalUnitCount);
         //NSLog(@"===========%@",[NSThread currentThread]);
         model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
@@ -317,19 +318,41 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     return _completedDownLoadQueueArr;
 }
 
+-(SLSessionManager *)sessionManager{
+
+    _sessionManager = [SLSessionManager sessionManager];
+    
+    __weak typeof(self) weakSelf = self;
+    //当网络发生改变的时候，该回调会被调用
+    [_sessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        
+        if (status != AFNetworkReachabilityStatusReachableViaWiFi) {
+            //先暂停所有的下载
+            [SLDownLoadQueue pauseAll];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您现在是非WiFi网络，要继续下载吗" delegate:weakSelf cancelButtonTitle:@"继续" otherButtonTitles:@"取消", nil];
+            alert.tag = 666655;
+            [alert show];
+        }
+        
+    }];
+    return _sessionManager;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+
+    if (buttonIndex == 0) {
+        [SLDownLoadQueue startDownloadAll];
+    }else if (buttonIndex == 1) {
+        [DownLoadTools archiveDownLoadModelArrWithModelArr:self.downLoadQueueArr withKey:DownLoadArchiveKey andPath:DownLoad_Archive_Path];
+    }
+}
+
 #pragma mark - 工具接口API
 
 //添加一个下载
 +(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
     [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model];
 }
-
-/*
- DownLoadStateWaiting,           //等待下载，最大下载数规定为3个，大于三个任务就挂起等待
- DownLoadStatePause,             //下载暂停
- DownLoadStateDownloading,       //下载中
- DownLoadStateDownloadfinished   //下载完成
- */
 
 //删除一个下载
 +(void)deleteDownLoadWithModel:(SLDownLoadModel *)model{

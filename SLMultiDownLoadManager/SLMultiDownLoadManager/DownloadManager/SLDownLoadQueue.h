@@ -10,11 +10,13 @@
 #import "DownLoadHeader.h"
 #import "SLDownLoadModel.h"
 
-@interface SLDownLoadQueue : NSObject
+@interface SLDownLoadQueue : NSObject<UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *downLoadQueueArr;  //装载非下载完成状态的model
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *completedDownLoadQueueArr;  //装载已经下载完成的model
 
+//下载manager
+@property (nonatomic, strong) SLSessionManager *sessionManager;
 //最大同时下载数量3个以内最好，默认三个，这个数还是不要改了，骚年
 @property (nonatomic, assign, readonly) NSInteger maxDownLoadTask;
 

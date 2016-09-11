@@ -15,7 +15,9 @@ static SLSessionManager *sessionManager = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[SLSessionManager alloc]init];
+        sessionManager = [[SLSessionManager alloc]initWithBaseURL:[NSURL URLWithString:@"https://www.baidu.com/"]];
+        //检测网络
+        [sessionManager.reachabilityManager startMonitoring];
     });
     
     return sessionManager;

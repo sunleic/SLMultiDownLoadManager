@@ -46,5 +46,6 @@ extern NSString *const DownLoadResourceFinished;
 
 #import "DownLoadTools.h"
 #import "SLFileManager.h"
+#import "SLSessionManager.h"
 
 #endif /* DownLoadHeader_h */
