@@ -64,7 +64,7 @@
     model1.thumbnailUrlStr = @"";
     model1.title = model1.resourceID;
     
-    [SLDownLoadQueue addDownTaskWithDownLoadModel:model1];
+    [SLDownLoadQueue addDownLoadTaskWithModel:model1];
 }
 
 - (void)didReceiveMemoryWarning {

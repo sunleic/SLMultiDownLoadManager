@@ -76,11 +76,9 @@
     if (_segmentCtl.selectedSegmentIndex == 0) {
         
         for (SLDownLoadModel *model in _tableViewOne.dataArr) {
-            if (model.downLoadTask) {
-                [model.downLoadTask cancel];
-            }
-        }
-        [_tableViewOne.dataArr removeAllObjects];
+            
+            [SLDownLoadQueue deleteDownLoadWithModel:model];
+        }        [_tableViewOne.dataArr removeAllObjects];
         [_tableViewOne.deleteDataArr removeAllObjects];
         _tableViewOne.editing = NO;
         [_tableViewOne reloadData];
@@ -89,13 +87,13 @@
         
     }else{
         
-        [_tableViewTwo.dataArr removeAllObjects];
+        for (SLDownLoadModel *model in _tableViewTwo.dataArr) {
+            [SLDownLoadQueue deleteDownLoadWithModel:model];
+        }
         [_tableViewTwo.deleteDataArr removeAllObjects];
         _tableViewTwo.editing = NO;
         [_tableViewTwo reloadData];
-        
-        //重新归档已经下载完的
-        [DownLoadTools archiveDownLoadModelArrWithModelArr:_tableViewTwo.dataArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
+
     }
     [self setToolBarHidden:YES animation:YES];
     [editBtn setTitle:@"编辑" forState:UIControlStateNormal];

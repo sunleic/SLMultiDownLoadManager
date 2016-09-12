@@ -331,6 +331,11 @@
 					7182790B1D51DA6D009E5C86 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 329ZYF9D22;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					718279241D51DA6D009E5C86 = {
 						CreatedOnToolsVersion = 7.3;

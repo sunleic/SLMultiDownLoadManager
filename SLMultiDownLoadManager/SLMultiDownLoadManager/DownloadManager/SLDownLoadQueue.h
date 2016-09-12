@@ -21,7 +21,7 @@
 @property (nonatomic, assign, readonly) NSInteger maxDownLoadTask;
 
 //添加下载任务到下载队列中
-+(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model;
++(void)addDownLoadTaskWithModel:(SLDownLoadModel *)model;
 
 //删除一个下载
 +(void)deleteDownLoadWithModel:(SLDownLoadModel *)model;

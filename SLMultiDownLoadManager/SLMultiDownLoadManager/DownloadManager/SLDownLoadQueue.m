@@ -54,7 +54,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
 #pragma mark - 添加下载任务到下载队列中
 
--(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
+-(void)addDownLoadTaskWithModel:(SLDownLoadModel *)model{
     //SLog(@"%p",model);
     
     
@@ -350,8 +350,8 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 #pragma mark - 工具接口API
 
 //添加一个下载
-+(void)addDownTaskWithDownLoadModel:(SLDownLoadModel *)model{
-    [[SLDownLoadQueue downLoadQueue] addDownTaskWithDownLoadModel:model];
++(void)addDownLoadTaskWithModel:(SLDownLoadModel *)model{
+    [[SLDownLoadQueue downLoadQueue] addDownLoadTaskWithModel:model];
 }
 
 //删除一个下载
@@ -362,7 +362,9 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         
         NSString *videoName = [NSString stringWithFormat:@"%@.mp4",model.resourceID];
         NSString *videoPath = [[SLFileManager getDownloadRootDir] stringByAppendingPathComponent:videoName];
-        [SLFileManager deletePathWithName:videoPath];
+        if (model.resourceID.length != 0) {
+            [SLFileManager deletePathWithName:videoPath];
+        }
         
         [queue.completedDownLoadQueueArr removeObject:model];
         //归档已经下载完的
