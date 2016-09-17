@@ -75,7 +75,9 @@
     //SLog(@"全部非选中状态");
     if (_segmentCtl.selectedSegmentIndex == 0) {
         
-        for (SLDownLoadModel *model in _tableViewOne.dataArr) {
+        [_tableViewOne.deleteDataArr addObjectsFromArray:_tableViewOne.dataArr];
+        
+        for (SLDownLoadModel *model in _tableViewOne.deleteDataArr) {
             
             [SLDownLoadQueue deleteDownLoadWithModel:model];
         }        [_tableViewOne.dataArr removeAllObjects];
@@ -87,7 +89,8 @@
         
     }else{
         
-        for (SLDownLoadModel *model in _tableViewTwo.dataArr) {
+        [_tableViewTwo.deleteDataArr addObjectsFromArray:_tableViewTwo.dataArr];
+        for (SLDownLoadModel *model in _tableViewTwo.deleteDataArr) {
             [SLDownLoadQueue deleteDownLoadWithModel:model];
         }
         [_tableViewTwo.deleteDataArr removeAllObjects];

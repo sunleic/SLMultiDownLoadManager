@@ -15,8 +15,21 @@ static SLSessionManager *sessionManager = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sessionManager = [[SLSessionManager alloc]initWithBaseURL:[NSURL URLWithString:@"https://www.baidu.com/"]];
-        //检测网络
+        
+        NSString *identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
+        //最大并发下载数
+        configuration.HTTPMaximumConnectionsPerHost = 3;
+        
+        //当在后台完成传输的时候是否启动恢复或者启动APP
+        configuration.sessionSendsLaunchEvents = YES;
+        
+        configuration.discretionary = YES;
+        
+        sessionManager = [[SLSessionManager alloc]initWithSessionConfiguration:configuration];
+        
+        //开启检测网络
         [sessionManager.reachabilityManager startMonitoring];
     });
     

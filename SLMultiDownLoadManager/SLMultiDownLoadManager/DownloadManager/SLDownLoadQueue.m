@@ -15,13 +15,17 @@ NSString *const DownLoadArchiveKey = @"DownLoadQueueArr";
 NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
 NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
-@implementation SLDownLoadQueue
+@implementation SLDownLoadQueue{
+
+    //最大同时下载数量3个以内最好，默认三个，这个数还是不要改了，骚年
+    NSInteger _maxDownLoadTask;
+}
 
 
 -(instancetype)init{
     if (self = [super init]) {
-        //默认同时下载数量为3，不易过多而导致开辟太多线程
-        _maxDownLoadTask = 3;
+        //默认同时下载数量为1，不易过多而导致开辟太多线程
+        _maxDownLoadTask = 1;
     }
     return self;
 }
@@ -47,7 +51,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         }
     }
     //新增下载任务
-    for (int m = 0; m < self.maxDownLoadTask - i; m++) {
+    for (int m = 0; m < _maxDownLoadTask - i; m++) {
         [self startDownload];
     }
 }
@@ -56,8 +60,6 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
 -(void)addDownLoadTaskWithModel:(SLDownLoadModel *)model{
     //SLog(@"%p",model);
-    
-    
     
     if (![self.downLoadQueueArr containsObject:model] && ![self.completedDownLoadQueueArr containsObject:model] && model) {
         
@@ -81,6 +83,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         modelTmp.downLoadedByetes = 0.f;
         modelTmp.downLoadSpeed = 0.f;
         modelTmp.downLoadProgress = 0.f;
+        modelTmp.resumeDataPath = nil;
         
         //SLog(@"%@",modelTmp.fileUUID);
         [self.downLoadQueueArr addObject:modelTmp];
@@ -138,7 +141,6 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     
     SLDownLoadModel *model = [self nextDownLoadModel];
     if (nil == model) return;
-    
     if ([self isValidResumeDataByModel:model]) {
         //断点续传
         [self downLoadResumeDataWithModel:model];
@@ -151,24 +153,21 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 //判断是否是有效的缓存，为NO则标示不能用于断点续传
 -(BOOL)isValidResumeDataByModel:(SLDownLoadModel *)model{
     
-    //断点续传的描述文件
-    NSString *fullPath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
-    
-    if ([SLFileManager isExistPath:fullPath]) {
+    if (model.resumeDataPath && model.resumeDataPath.length>0) {
         
-        NSDictionary *resumeDataDic = [NSDictionary dictionaryWithContentsOfFile:fullPath];
+        NSDictionary *resumeDataDic = [NSDictionary dictionaryWithContentsOfFile:model.resumeDataPath];
         //断点续传的描述文件中对应的的资源缓存文件，默认是存放在系统的tmp目录下
         NSString *resumeDataTmpName = resumeDataDic[@"NSURLSessionResumeInfoTempFileName"];
         NSString *resumeDataTmpPath = [[SLFileManager getTmpPath] stringByAppendingPathComponent:resumeDataTmpName];
         
         //NSLog(@"--%@--\n--%@",resumeDataTmpName,resumeDataDic);
         
-        if ([SLFileManager isExistPath:resumeDataTmpPath]) {
+        if ([SLFileManager isExistPath:resumeDataTmpPath] && resumeDataTmpName.length > 0) {
             
             return YES;
         }else{
             //清楚无效的断点续传描述文件
-            [SLFileManager deletePathWithName:fullPath];
+            [SLFileManager deletePathWithName:model.resumeDataPath];
             
             return NO;
         }
@@ -192,7 +191,20 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
         return;
     }
     
-    model.downLoadTask = [self.sessionManager  downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
+    SLSessionManager *sessionManager = [SLSessionManager sessionManager];
+    //当网络发生改变的时候，该回调会被调用
+    [sessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        
+        if (status != AFNetworkReachabilityStatusReachableViaWiFi) {
+            //先暂停所有的下载
+            [SLDownLoadQueue pauseAll];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您现在是非WiFi网络，要继续下载吗" delegate:weakSelf cancelButtonTitle:@"继续" otherButtonTitles:@"取消", nil];
+            alert.tag = 666655;
+            [alert show];
+        }
+    }];
+    
+    model.downLoadTask = [sessionManager  downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
         
         NSLog(@"下载中。。。。。。%lld",downloadProgress.completedUnitCount);
         model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
@@ -240,10 +252,22 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     __block NSDate *oldDate = [NSDate date]; //记录上次的数据回传的时间
     __block float  downLoadBytesTmp = 0;     //记录上次数据回传的大小
 
+    SLSessionManager *sessionManager = [SLSessionManager sessionManager];
+    //当网络发生改变的时候，该回调会被调用
+    [sessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        
+        if (status != AFNetworkReachabilityStatusReachableViaWiFi) {
+            //先暂停所有的下载
+            [SLDownLoadQueue pauseAll];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您现在是非WiFi网络，要继续下载吗" delegate:weakSelf cancelButtonTitle:@"继续" otherButtonTitles:@"取消", nil];
+            alert.tag = 666655;
+            [alert show];
+        }
+    }];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:model.downLoadUrlStr]];
     
-    model.downLoadTask = [self.sessionManager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+    model.downLoadTask = [sessionManager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"下载中___。。。。。。%lld-----共++++%lld",downloadProgress.completedUnitCount,downloadProgress.totalUnitCount);
         //NSLog(@"===========%@",[NSThread currentThread]);
         model.downLoadedByetes = downloadProgress.completedUnitCount; //已经下载的
@@ -285,18 +309,27 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 #pragma mark - 暂停下载
 //暂停某个下载任务
 -(void)pauseWithDownLoadModel:(SLDownLoadModel *)model{
+    
     //如果在下载状态或者等待下载状态则暂停
-    if (DownLoadStateDownloading == model.downLoadState) {
+    if ((DownLoadStateDownloading == model.downLoadState) && model.downLoadTask) {
+        
+        __weak typeof(self) weakSelf = self;
         //取消是异步的
         [model.downLoadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
             NSString *cachePath = [[SLFileManager getDownloadCacheDir] stringByAppendingPathComponent:model.resourceID];
             [resumeData writeToFile:cachePath atomically:YES];
+            model.resumeDataPath = cachePath;
+            NSLog(@"__________________)))))))))))))))))))))1");
+            
+            //置空，防止归档时出错
+            model.downLoadTask = nil;
+            //更改为暂停状态
+            model.downLoadState = DownLoadStatePause;
+            //更新下载
+            [weakSelf updateDownLoad];
         }];
-        //置空，防止归档时出错
-        model.downLoadTask = nil;
-        //更改为暂停状态
+    }else{
         model.downLoadState = DownLoadStatePause;
-        //更新下载
         [self updateDownLoad];
     }
 }
@@ -318,25 +351,6 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     return _completedDownLoadQueueArr;
 }
 
--(SLSessionManager *)sessionManager{
-
-    _sessionManager = [SLSessionManager sessionManager];
-    
-    __weak typeof(self) weakSelf = self;
-    //当网络发生改变的时候，该回调会被调用
-    [_sessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        
-        if (status != AFNetworkReachabilityStatusReachableViaWiFi) {
-            //先暂停所有的下载
-            [SLDownLoadQueue pauseAll];
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您现在是非WiFi网络，要继续下载吗" delegate:weakSelf cancelButtonTitle:@"继续" otherButtonTitles:@"取消", nil];
-            alert.tag = 666655;
-            [alert show];
-        }
-        
-    }];
-    return _sessionManager;
-}
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
 
@@ -422,7 +436,10 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     
     SLDownLoadQueue *queue = [SLDownLoadQueue downLoadQueue];
     for (SLDownLoadModel *model in queue.downLoadQueueArr) {
-        model.downLoadState = DownLoadStateWaiting;
+        
+        if (model.downLoadState != DownLoadStateDownloading) {
+            model.downLoadState = DownLoadStateWaiting;
+        }
     }
     [queue updateDownLoad];
 }
@@ -478,6 +495,9 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 }
 
 +(void)appWillTerminate{
+    
+    
+        
     SLog(@"app将要被杀死。。。。111--%@",[NSThread currentThread]);
     SLDownLoadQueue *downQueue = [SLDownLoadQueue downLoadQueue];
     dispatch_queue_t queue = dispatch_queue_create("queue", DISPATCH_QUEUE_CONCURRENT);
@@ -491,15 +511,19 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     dispatch_group_wait(group,DISPATCH_TIME_FOREVER);
     SLog(@"都取消完毕了。。。。222");
     
-    //给点时间进行异步暂停所有下载
-//    sleep(30);
-    
     //归档正在下载或等待下载的
     [DownLoadTools archiveDownLoadModelArrWithModelArr:downQueue.downLoadQueueArr withKey:DownLoadArchiveKey andPath:DownLoad_Archive_Path];
     
     //归档已经下载完的
     [DownLoadTools archiveDownLoadModelArrWithModelArr:downQueue.completedDownLoadQueueArr withKey:CompletedDownLoadArchiveKey andPath:CompletedDownLoad_Archive_Path];
     SLog(@"app将要被杀死。。。。222--%@",[NSThread currentThread]);
+
+
+    [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"" expirationHandler:^{
+        
+        
+        [[UIApplication sharedApplication] endBackgroundTask:2];
+    }];
 }
 
 //单例API

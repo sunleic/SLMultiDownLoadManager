@@ -64,4 +64,10 @@
     [SLDownLoadQueue appWillTerminate];
 }
 
+-(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+    
+    NSLog(@"----%@",identifier);
+    
+}
+
 @end

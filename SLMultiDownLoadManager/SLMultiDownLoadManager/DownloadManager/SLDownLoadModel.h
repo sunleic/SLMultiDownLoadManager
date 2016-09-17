@@ -26,5 +26,6 @@
 @property (nonatomic, assign)   float     downLoadedByetes;     //当前已下载量的大小
 @property (nonatomic, assign)   float     downLoadSpeed;        //下载速度
 @property (nonatomic, assign)   float     downLoadProgress;     //下载进度  百分比
+@property (nonatomic, copy)     NSString *resumeDataPath;       //记录缓存描述文件(用于断点续传)路径
 
 @end
