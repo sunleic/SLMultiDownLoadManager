@@ -20,7 +20,7 @@ static SLSessionManager *sessionManager = nil;
 
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
         //最大并发下载数
-        configuration.HTTPMaximumConnectionsPerHost = 3;
+        configuration.HTTPMaximumConnectionsPerHost = 1;
         
         //当在后台完成传输的时候是否启动恢复或者启动APP
         configuration.sessionSendsLaunchEvents = YES;

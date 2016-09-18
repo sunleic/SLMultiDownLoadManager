@@ -7,6 +7,7 @@
 //
 
 #import "DownLoadTools.h"
+#include <sys/mount.h>
 #import "SLFileManager.h"
 #import "DownLoadHeader.h"
 
@@ -38,6 +39,33 @@
     [unarchiver2 finishDecoding];
 
     return archivingArr;
+}
+
+//"/private/var"    "/"
+//获取磁盘剩余空间
++ (long long)getDiskFreeSpaceEx{
+    
+    struct statfs buf;
+    long long freespace;
+    freespace = 0;
+    
+    if(statfs("/private/var", &buf) >= 0){
+        freespace = (long long)buf.f_bsize * buf.f_bfree;
+    }
+    return freespace ;
+}
+
+//获取磁盘的总大小
++ (long long)getDiskTotalSpaceEx{
+    
+    struct statfs buf;
+    long long totalspace = 0;
+    
+    if(statfs("/private/var", &buf) >= 0){
+        totalspace = (long long)buf.f_bsize * buf.f_blocks;
+    }
+    
+    return totalspace;
 }
 
 @end

@@ -16,4 +16,10 @@
 //返回解归档下载完的model数组
 + (NSMutableArray *)unArchiveDownLoadModelArrWithKey:(NSString *)key andPath:(NSString *)path;
 
+//获取剩余磁盘空间大小
++ (long long)getDiskFreeSpaceEx;
+
+//获取磁盘的总大小
++ (long long)getDiskTotalSpaceEx;
+
 @end

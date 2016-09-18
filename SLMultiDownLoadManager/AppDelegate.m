@@ -32,6 +32,12 @@
     
     NSLog(@"%@",NSHomeDirectory());
     
+    long long freeDiskSize = [DownLoadTools getDiskFreeSpaceEx];
+    long long totalDiskSize = [DownLoadTools getDiskTotalSpaceEx];
+    
+    NSLog(@"剩余：：：%7.2lf G --- 总计：：%7.2lf G",freeDiskSize/(1024*1024*1024.0),totalDiskSize/(1024*1024*1024.0));
+    
+    
     //获取缓存
     [SLDownLoadQueue getDownLoadCache];
     
