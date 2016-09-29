@@ -16,7 +16,7 @@
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *completedDownLoadQueueArr;  //装载已经下载完成的model
 
 ////下载manager
-//@property (nonatomic, strong) SLSessionManager *sessionManager;
+@property (nonatomic, strong) SLSessionManager *sessionManager;
 
 //添加下载任务到下载队列中
 +(void)addDownLoadTaskWithModel:(SLDownLoadModel *)model;

@@ -27,7 +27,6 @@
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
     
     self.window.rootViewController = nav;
-    
     [self.window makeKeyAndVisible];
     
     NSLog(@"%@",NSHomeDirectory());
@@ -36,7 +35,6 @@
     long long totalDiskSize = [DownLoadTools getDiskTotalSpaceEx];
     
     NSLog(@"剩余：：：%7.2lf G --- 总计：：%7.2lf G",freeDiskSize/(1024*1024*1024.0),totalDiskSize/(1024*1024*1024.0));
-    
     
     //获取缓存
     [SLDownLoadQueue getDownLoadCache];
@@ -70,10 +68,14 @@
     [SLDownLoadQueue appWillTerminate];
 }
 
+//在应用处于后台，且后台任务下载完成时回调
 -(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
     
     NSLog(@"----%@",identifier);
-    
 }
+
+
+
+
 
 @end

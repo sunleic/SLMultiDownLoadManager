@@ -56,7 +56,7 @@
     UIButton *allSelectedBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
     [allSelectedBtn setTitle:@"全部删除" forState:UIControlStateNormal];
     [allSelectedBtn setTitleColor:[UIColor purpleColor] forState:UIControlStateNormal];
-    [allSelectedBtn addTarget:self action:@selector(deleteAllAction:) forControlEvents:UIControlEventTouchUpInside];
+    [allSelectedBtn addTarget:self action:@selector(deleteAllWithButton:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:allSelectedBtn];
     
     UIBarButtonItem *spaceItem =[ [UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -69,6 +69,24 @@
     
     self.toolbarItems = @[leftBarButtonItem,spaceItem,deleteBarButtonItem];
 }
+
+
+-(void)deleteAllWithButton:(UIButton *)button{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"您确定要全部删除吗" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self editAction:editBtn];
+    }];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteAllAction:button];
+    }];
+    
+    [alert addAction:cancel];
+    [alert addAction:ok];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 
 #pragma mark - 删除
 -(void)deleteAllAction:(UIButton *)button{
