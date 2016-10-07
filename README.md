@@ -3,7 +3,7 @@
 ![效果图](https://github.com/SLPowerCoder/SLMultiDownLoadManager/blob/master/SLMultiDownLoad.gif)
 
 ### 已经解决的问题
-* 限制同时下载任务的最大数量
+- [X] 限制同时下载任务的最大数量
 * 断点续传
 * 后台下载
 * 处理了人为杀死APP的时候数据的缓存问题
