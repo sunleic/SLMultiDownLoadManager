@@ -69,9 +69,16 @@
 }
 
 //在应用处于后台，且后台任务下载完成时回调
--(void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler{
+#pragma mark --- 后台下载
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
+{
+    if ([identifier isEqualToString:@"com.sunlei"]) {
+     
+        [SLDownLoadQueue appWillTerminate];
+//        self.backgroundSessionCompletionHandler = completionHandler;
+        completionHandler();
+    }
     
-    NSLog(@"----%@",identifier);
 }
 
 

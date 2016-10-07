@@ -10,7 +10,7 @@
 #import "DownLoadHeader.h"
 #import "SLDownLoadModel.h"
 
-@interface SLDownLoadQueue : NSObject<UIAlertViewDelegate>
+@interface SLDownLoadQueue : NSObject<UIAlertViewDelegate,NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *downLoadQueueArr;  //装载非下载完成状态的model
 @property (nonatomic, strong) NSMutableArray <SLDownLoadModel *> *completedDownLoadQueueArr;  //装载已经下载完成的model

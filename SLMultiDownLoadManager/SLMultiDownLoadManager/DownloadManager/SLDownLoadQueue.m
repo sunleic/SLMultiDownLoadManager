@@ -10,6 +10,7 @@
 #import "DownLoadTools.h"
 #import "SLSessionManager.h"
 #import "SLFileManager.h"
+#import "AppDelegate.h"
 
 NSString *const DownLoadArchiveKey = @"DownLoadQueueArr";
 NSString *const CompletedDownLoadArchiveKey = @"CompletedDownLoadQueueArr";
@@ -19,6 +20,7 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
 
     //最大同时下载数量3个以内最好，默认三个，这个数还是不要改了，骚年
     NSInteger _maxDownLoadTask;
+    NSURLSessionDownloadTask *_downloadTask;
 }
 
 
@@ -542,5 +544,132 @@ NSString *const DownLoadResourceFinished = @"DownLoadResourceFinished";
     SLSessionManager *sessionManager = [SLSessionManager sessionManager];
     return sessionManager;
 }
+
+/****************************************************************************************/
+
+#pragma mark --- 文件下载
+/**
+ *  使用NSURLSessionDownloadTask下载文件过程中注意:
+ 下载文件之后会自动保存到一个临时目录中, 需要自己将文件重新放到其他指定的目录中
+ */
+- (void)downLoadFile
+{
+    // 创建url
+    NSString *urlStr =[NSString stringWithFormat:@"%@", @"url"];
+    urlStr = [urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *Url = [NSURL URLWithString:urlStr];
+    
+    // 创建请求
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:Url];
+    
+    // 创建会话
+    
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.sunlei"];
+    //最大并发下载数
+    configuration.HTTPMaximumConnectionsPerHost = 3;
+    //当在后台完成传输的时候是否启动恢复或者启动APP
+    configuration.sessionSendsLaunchEvents = YES;
+    //是否允许性能优化，例如电量低的情况下系统有可能停止后台数据传输
+    configuration.discretionary = YES;
+    //请求超时时间
+    configuration.timeoutIntervalForRequest = 15;
+    //是否允许移动蜂窝网络
+    configuration.allowsCellularAccess = YES;
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+    
+    NSURLSessionDownloadTask *downLoadTask = [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!error) {
+            // 下载成功
+            // 注意 location是下载后的临时保存路径, 需要将它移动到需要保存的位置
+            NSError *saveError;
+            // 创建一个自定义存储路径
+            NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+            NSString *savePath = [cachePath stringByAppendingPathComponent:@"fileName"];
+            NSURL *saveURL = [NSURL fileURLWithPath:savePath];
+            
+            // 文件复制到cache路径中
+            [[NSFileManager defaultManager] copyItemAtURL:location toURL:saveURL error:&saveError];
+            if (!saveError) {
+                NSLog(@"保存成功");
+            } else {
+                NSLog(@"error is %@", saveError.localizedDescription);
+            }
+        } else {
+            NSLog(@"error is : %@", error.localizedDescription);
+        }
+    }];
+    // 恢复线程, 启动任务
+    [downLoadTask resume];
+    
+}
+
+#pragma mark -- 取消下载
+-(void)cancleDownLoad
+{
+    [_downloadTask cancel];
+}
+#pragma mark --- 挂起下载
+- (void)suspendDownload
+{
+    [_downloadTask suspend];
+}
+#pragma mark ---- 恢复继续下载
+- (void)resumeDownLoad
+{
+    [_downloadTask resume];
+    
+    
+}
+
+#pragma mark ---- downLoadTask 代理方法
+// 下载过程中 会多次调用, 记录下载进度
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+    // 记录下载进度
+    NSLog(@"--%lld---%lld",totalBytesWritten,totalBytesExpectedToWrite);
+}
+
+// 下载完成
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location{
+    NSError *error;
+    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *savePath = [cachePath stringByAppendingPathComponent:@"savename"];
+    
+    NSURL *saveUrl = [NSURL fileURLWithPath:savePath];
+    // 通过文件管理 复制文件
+    [[NSFileManager defaultManager] copyItemAtURL:location toURL:saveUrl error:&error];
+    if (error) {
+        NSLog(@"Error is %@", error.localizedDescription);
+    }
+}
+
+// 当调用恢复下载的时候 触发的代理方法 [_downLoadTask resume]
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+{
+    
+    
+}
+
+
+// 任务完成, 不管是否下载成功
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    
+}
+
+
+// session 后台下载完成 之后的操作 (本地通知 或者 更新UI)
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    AppDelegate *appdelgate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    if (appdelgate.backgroundSessionCompletionHandler) {
+        void (^completionHandle)() = appdelgate.backgroundSessionCompletionHandler;
+        appdelgate.backgroundSessionCompletionHandler = nil;
+        completionHandle();
+    }
+}
+
 
 @end
